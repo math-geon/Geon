@@ -9,6 +9,10 @@
     <body>
         <div class="MainMenu">
             <script src="main.js"></script>
+            <script src='/socket.io/socket.io.js'></script>
+            <script>
+                const socket = io();
+            </script>
             <script class="ParticlesDefiner" src="https://vincentgarreau.com/particles.js/assets/_build/js/lib/particles.js"></script>
             <script class="ParticleRunner">
                 function tryer() { 
@@ -137,7 +141,13 @@
             <div id="particles-js" style="width: 100vw; height: 100vh"></div>
             <div class="MenuBackground">
                 <h1 class="Title">Insert Logo Here</h1>
-                <button class="PlayButton" onclick="StartGame()">Jogar</button>
+                <form class="RoomForm">
+                    <input class="RoomId" placeholder="codígo da sala"></input>
+                </form>
+                <div class="Buttons">
+                    <button class="PlayButton" onclick="StartGame()" disabled>Jogar</button>
+                    <button class="CreateRoom" onclick="">Criar Sala</button>
+                </div>
             </div>
             <div class="ConnectingScreen" style="display: none">
                 <h1 class="ConnectingText">Conectando...</h1>

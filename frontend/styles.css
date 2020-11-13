@@ -9,13 +9,13 @@ body {
 }
 
 @keyframes PlayButtonAnim {
-    0% {box-shadow: 5px -10px 0px #530074;}
+    0% {box-shadow: 5px -5px 0px #530074;}
     100% {box-shadow: 0px 0px 0px #530074;}
 }
 
 @keyframes PlayButtonAnimReverse {
     0% {box-shadow: 0px 0px 0px #530074;}
-    100% {box-shadow: 5px -10px 0px #530074;}
+    100% {box-shadow: 5px -5px 0px #530074;}
 }
 
 #particles-js {
@@ -68,13 +68,37 @@ body {
     text-align: center;
 }
 
-.MenuBackground .PlayButton {
-    position: absolute;
+.MenuBackground .RoomId {
+    position: fixed;
+    width: 20vw;
+    height: 5vw;
+    left: 28vw;
+    bottom: 35vh;
+    border-radius: 250px;
+    text-align: center;
+    color: #530074;
+    font-size: 2vw;
+    -webkit-appearance:     none;
+    -moz-appearance:        none;
+    -ms-appearance:         none;
+    -o-appearance:          none;
+    appearance:             none;
+    outline: none;
+    border: 2px solid #530074;
+} 
+
+.MenuBackground .Buttons {
+    position: fixed;
+    left: 26vw;
+    bottom: 12vh;
+}
+
+.MenuBackground .Buttons button {
+    position: relative;
     width: 20vw;
     height: 5vw;
     border-radius: 250px;
     bottom: 10vh;
-    margin-left: 27vw;
     background-color: #FFF;
     -webkit-appearance:     none;
     -moz-appearance:        none;
@@ -85,12 +109,14 @@ body {
     color: #530074;
     font-size: 3vw;
     border: 2px solid #530074;
-    box-shadow: 5px -10px 0px #530074;
+    box-shadow: 5px -5px 0px #530074;
     animation: PlayButtonAnimReverse 0.3s ease-out;
     cursor: pointer;
+    margin-right: 2vw;
+    margin-left: 2vw;
 }
 
-.MenuBackground .PlayButton:hover {
+.MenuBackground button:hover {
     animation: PlayButtonAnim 0.3s ease-out;
     box-shadow: 0px 0px 0px #530074;
 }

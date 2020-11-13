@@ -5,5 +5,5 @@ function StartGame() {
 }
 
 function ConnectToServer() {
-
+    socket.emit('connection')
 }

@@ -4,6 +4,7 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http)
 const path = require('path')
 const FrontEndPath = path.resolve('..','frontend')
+const connection = require('./src/connectionhandler');
 
 //Permite o envio de dados entre o jogo e o servidor usando o padrão json.
 app.use(express.json());
@@ -13,6 +14,8 @@ app.use(express.static(FrontEndPath));
 app.get("/", (req, res)=> {
     res.sendFile(path.resolve(FrontEndPath, 'Geon.html'))
 })
+
+connection(io);
 
 //Liga o servidor.
 http.listen('3000', ()=>{
