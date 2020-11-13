@@ -8,6 +8,7 @@
     </header>
     <body>
         <div class="MainMenu">
+            <script src="main.js"></script>
             <script class="ParticlesDefiner" src="https://vincentgarreau.com/particles.js/assets/_build/js/lib/particles.js"></script>
             <script class="ParticleRunner">
                 function tryer() { 
@@ -22,7 +23,7 @@
                                 }
                                 },
                                 color: {
-                                value: "#000"
+                                value: "#FFF"
                                 },
                                 shape: {
                                 type: "circle",
@@ -40,7 +41,7 @@
                                 }
                                 },
                                 opacity: {
-                                value: 0.48927153781200905,
+                                value: 1,
                                 random: false,
                                 anim: {
                                     enable: true,
@@ -133,8 +134,17 @@
             <div class="LoadingScreen">
                 <h1 class="LoadingText">Carregando...</h1>
             </div>
-            <h1 class="Title">Geon</h1>
             <div id="particles-js" style="width: 100vw; height: 100vh"></div>
+            <div class="MenuBackground">
+                <h1 class="Title">Insert Logo Here</h1>
+                <button class="PlayButton" onclick="StartGame()">Jogar</button>
+            </div>
+            <div class="ConnectingScreen" style="display: none">
+                <h1 class="ConnectingText">Conectando...</h1>
+                <div class="ProgressBar">
+                    <div class="ProgressProgressBar"></div>
+                </div>
+            </div>
         </div>
     </body>
 </html>
