@@ -1,3 +1,5 @@
+var CurrentRoom = '';
+
 function getRandomString(length) {
     var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var result = '';
@@ -25,9 +27,29 @@ function RoomIdHandler() {
     }
 }
 
+function ProgressbarHandler(Name, Max, Percentage) {
+    Value = (Percentage/100)*Max;
+    AnimationTime = 0;
+    function Animation() {
+        setTimeout(()=>{
+            if (AnimationTime > 100) {return;}
+            AnimationTime += 2;
+            document.getElementsByClassName(Name)[0].style.width = ((AnimationTime/100)*Value)+'vw';
+            Animation()
+        }, 1)
+    }
+    Animation();
+}
+
 function CreateGame() {
     document.getElementsByClassName("MenuBackground")[0].style.display = 'none';
     document.getElementsByClassName("ConnectingScreen")[0].style.display = 'block';
     document.getElementsByClassName("ProgressProgressBar")[0].style.width = '0vw';
-    socket.emit('GenerateRoom', {UserId: getRandomString(12)});
+    socket.emit('GenerateRoom', JSON.stringify({UserId: getRandomString(12)}));
+    ProgressbarHandler("ProgressProgressBar", "49.5", "35");
+    socket.on('RoomId', (Data) => {
+        Data = JSON.parse(Data)
+        CurrentRoom = Data.RoomId;
+        ProgressbarHandler("ProgressProgressBar", "49.5", "65");
+    })
 }
