@@ -1,3 +1,12 @@
+function getRandomString(length) {
+    var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var result = '';
+    for ( var i = 0; i < length; i++ ) {
+        result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+    }
+    return result;
+}
+
 function StartGame() {
     document.getElementsByClassName("MenuBackground")[0].style.display = 'none';
     document.getElementsByClassName("ConnectingScreen")[0].style.display = 'block';
@@ -20,5 +29,5 @@ function CreateGame() {
     document.getElementsByClassName("MenuBackground")[0].style.display = 'none';
     document.getElementsByClassName("ConnectingScreen")[0].style.display = 'block';
     document.getElementsByClassName("ProgressProgressBar")[0].style.width = '0vw';
-    socket.emit('GenerateRoom');
+    socket.emit('GenerateRoom', {UserId: getRandomString(12)});
 }
