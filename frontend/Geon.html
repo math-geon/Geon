@@ -128,31 +128,40 @@
                             retina_detect: false
                         })
                         document.getElementsByClassName("LoadingScreen")[0].id = 'Loaded';
-                        setTimeout(()=>{document.getElementsByClassName("LoadingScreen")[0].style.display = 'none'}, 5000)
+                        setTimeout(()=>{document.getElementsByClassName("LoadingScreen")[0].style.display = 'none'; Loaded()}, 5000)
                     } catch (e) {
                         setTimeout(()=>{tryer()}, 5000)
                     }
                 }; 
                 tryer()
             </script>
+            <div class="ErrorScreen" style="display: none">
+                <div class="ErrorBox">
+                    <h1 class="ErrorTextTitle">Conexão Perdida!</h1>
+                    <h1 class="ErrorTextDescription">Não foi possivel se conectar ao servidor.</h1>
+                    <div class="ErrorEffect"></div>
+                </div>
+            </div>
             <div class="LoadingScreen">
                 <h1 class="LoadingText">Carregando...</h1>
             </div>
-            <div id="particles-js" style="width: 100vw; height: 100vh"></div>
-            <div class="MenuBackground">
-                <h1 class="Title">Colocar a foto da logo aqui!!!</h1>
-                <form class="RoomForm">
-                    <input class="RoomId" placeholder="Código da sala" onInput="RoomIdHandler()" onPropertychange="RoomIdHandler()"></input>
-                </form>
-                <div class="Buttons">
-                    <button class="PlayButton" onclick="StartGame()" disabled>Jogar</button>
-                    <button class="CreateRoom" onclick="CreateGame()">Criar Sala</button>
+            <div class="Menus">
+                <div id="particles-js" style="width: 100vw; height: 100vh"></div>
+                <div class="MenuBackground">
+                    <h1 class="Title">Colocar a foto da logo aqui!!!</h1>
+                    <form class="RoomForm">
+                        <input class="RoomId" placeholder="Código da sala" onInput="RoomIdHandler()" onPropertychange="RoomIdHandler()"></input>
+                    </form>
+                    <div class="Buttons">
+                        <button class="PlayButton" onclick="StartGame()" disabled>Jogar</button>
+                        <button class="CreateRoom" onclick="CreateGame()">Criar Sala</button>
+                    </div>
                 </div>
-            </div>
-            <div class="ConnectingScreen" style="display: none">
-                <h1 class="ConnectingText">Conectando ao servidor...</h1>
-                <div class="ProgressBar">
-                    <div class="ProgressProgressBar"></div>
+                <div class="ConnectingScreen" style="display: none">
+                    <h1 class="ConnectingText">Conectando ao servidor...</h1>
+                    <div class="ProgressBar">
+                        <div class="ProgressProgressBar"></div>
+                    </div>
                 </div>
             </div>
         </div>
