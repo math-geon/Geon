@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #b300ff;
+}
+
+@keyframes LoadedAnimation {
+    0% {margin-top: 0;}
+    100% {margin-top: -100vh;}
+}
+
+#particles-js {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    margin: -8px;
+    top: 0;
+    left: 0;
+}
+
+#Loaded {
+    animation: LoadedAnimation 0.3s ease-out;
+    margin-top: -100vh;
+}
+
+.LoadingScreen {
+    position: absolute;
+    background-color: #FFAA00;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 100000;
+}
+
+.LoadingScreen .LoadingText {
+    font-size: 5vw;
+    color: #FFF;
+    margin-top: 35vh;
+    text-align: center;
+}
