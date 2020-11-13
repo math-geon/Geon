@@ -9,13 +9,13 @@ body {
 }
 
 @keyframes PlayButtonAnim {
-    0% {box-shadow: 5px -5px 0px #530074;}
-    100% {box-shadow: 0px 0px 0px #530074;}
+    0% {box-shadow: 0px 0px 0px #530074;}
+    100% {box-shadow: 5px -5px 0px #530074;}
 }
 
 @keyframes PlayButtonAnimReverse {
-    0% {box-shadow: 0px 0px 0px #530074;}
-    100% {box-shadow: 5px -5px 0px #530074;}
+    0% {box-shadow: 5px -5px 0px #530074;}
+    100% {box-shadow: 0px 0px 0px #530074;}
 }
 
 #particles-js {
@@ -60,7 +60,8 @@ body {
     margin-top: 12.5vh;
     margin-bottom: 12.5vh;
     border-radius: 25px;
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    box-shadow: 10px -10px 0px #320046;
+    border: 5px solid #530074;
 }
 
 .MenuBackground h1 {
@@ -109,7 +110,7 @@ body {
     color: #530074;
     font-size: 3vw;
     border: 2px solid #530074;
-    box-shadow: 5px -5px 0px #530074;
+    box-shadow: 0px 0px 0px #530074;
     animation: PlayButtonAnimReverse 0.3s ease-out;
     cursor: pointer;
     margin-right: 2vw;
@@ -118,7 +119,20 @@ body {
 
 .MenuBackground button:hover {
     animation: PlayButtonAnim 0.3s ease-out;
-    box-shadow: 0px 0px 0px #530074;
+    box-shadow: 5px -5px 0px #530074;
+}
+
+.MenuBackground button:disabled {
+    border: 2px solid #222;
+    background-color: #CCC;
+    box-shadow: 0px 0px 0px #222;
+    -webkit-animation: none !important;
+    -moz-animation: none !important;
+    -o-animation: none !important;
+    -ms-animation: none !important;
+    animation: none !important;
+    cursor: not-allowed;
+    color: #222;
 }
 
 .ConnectingScreen {
