@@ -5,6 +5,7 @@
         <meta charset='utf-8'>
         <link rel="stylesheet" type="text/css" href="styles.css">
         <title>Geon: O jogo de tabuleiro sobre geometria</Title>
+        <link href="resources/logoSmall.png" rel="shortcut icon" type="image/png" />
     </header>
     <body>
         <div class="MainMenu">
@@ -127,9 +128,13 @@
                             },
                             retina_detect: false
                         })
-                        document.getElementsByClassName("LoadingScreen")[0].id = 'Loaded';
+                        ProgressbarHandler("ProgressProgressBarBeforeGame", "49.5", "100", 1.7)
+                        setTimeout(()=>{ProgressbarHandler("ProgressProgressBarBeforeGame", "49.5", "100", 3)}, 1000);
+                        setTimeout(()=>{document.getElementsByClassName("ProgressProgressBarBeforeGame")[0].style.width = '49.5vw';}, 2000);
+                        setTimeout(()=>{document.getElementsByClassName("LoadingScreen")[0].id = 'Loaded'}, 2500);
                         setTimeout(()=>{document.getElementsByClassName("LoadingScreen")[0].style.display = 'none'; Loaded()}, 5000)
                     } catch (e) {
+                        ProgressbarHandler("ProgressProgressBarBeforeGame", "49.5", "75", 0.1)
                         setTimeout(()=>{tryer()}, 5000)
                     }
                 }; 
@@ -144,18 +149,27 @@
             </div>
             <div class="LoadingScreen">
                 <h1 class="LoadingText">Carregando...</h1>
+                <div class="ProgressBarBeforeGame">
+                    <div class="ProgressProgressBarBeforeGame"></div>
+                </div>
             </div>
             <div class="Menus">
-                <div id="particles-js" style="width: 100vw; height: 100vh"></div>
+                <div id="particles-js" style="width: 100vw; height: 100vh">
+                </div>
                 <div class="MenuBackground">
-                    <h1 class="Title">Colocar a foto da logo aqui!!!</h1>
+                    <img class="Icon" src="resources/logo.png"></img>
                     <form class="RoomForm">
                         <input class="RoomId" placeholder="Código da sala" onInput="RoomIdHandler()" onPropertychange="RoomIdHandler()"></input>
                     </form>
                     <div class="Buttons">
+                        <button class="CreditsButton" onclick="Credits()">Creditos</button>
                         <button class="PlayButton" onclick="StartGame()" disabled>Jogar</button>
                         <button class="CreateRoom" onclick="CreateGame()">Criar Sala</button>
                     </div>
+                </div>
+                <div class="CreditsScreen" style="display: none">
+                    <button class="BackToMainMenuFromCredits" onclick="BackToMainMenu('Credits')">Voltar</button>
+                    <h1 class="CreditsHeader">Creditos:</h1>
                 </div>
                 <div class="ConnectingScreen" style="display: none">
                     <h1 class="ConnectingText">Conectando ao servidor...</h1>

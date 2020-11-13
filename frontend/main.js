@@ -2,7 +2,6 @@ var CurrentRoom = '';
 var UserId = getRandomString(12);
 
 function Loaded() {
-
     socket.on('reconnect', ()=>{
        newUserId = getRandomString(12);
         oldUserId = UserId
@@ -42,14 +41,15 @@ function RoomIdHandler() {
     }
 }
 
-function ProgressbarHandler(Name, Max, Percentage) {
+function ProgressbarHandler(Name, Max, Percentage, Time) {
+    Time = Time || 2;
     if (Percentage === "100") { Percentage = "98"}
     Value = (Percentage/100)*Max;
     AnimationTime = 0;
     function Animation() {
         setTimeout(()=>{
             if (AnimationTime > 100) {return;}
-            AnimationTime += 2;
+            AnimationTime += Time;
             if (((AnimationTime/100)*Value) > document.getElementsByClassName(Name)[0].style.width.toString().substring(0,document.getElementsByClassName(Name)[0].style.width.toString().length-2)) {
                 document.getElementsByClassName(Name)[0].style.width = ((AnimationTime/100)*Value)+'vw';
             }
@@ -57,6 +57,18 @@ function ProgressbarHandler(Name, Max, Percentage) {
         }, 1)
     }
     Animation();
+}
+
+function Credits() {
+    document.getElementsByClassName("MenuBackground")[0].style.display = 'none';
+    document.getElementsByClassName("CreditsScreen")[0].style.display = 'block';
+}
+
+function BackToMainMenu(Page) {
+    if (Page === "Credits") {
+        document.getElementsByClassName("CreditsScreen")[0].style.display = 'none';
+    }
+    document.getElementsByClassName("MenuBackground")[0].style.display = 'block';
 }
 
 function CreateGame() {
