@@ -17,6 +17,16 @@ body {
     100% {box-shadow: 0px 0px 0px #530074;}
 }
 
+@keyframes UnboxMain {
+    0% {box-shadow: 10px -10px 0px #320046;}
+    100% {box-shadow: 0px 0px 0px #320046;}
+}
+
+@keyframes BoxMain {
+    0% {box-shadow: 0px 0px 0px #320046;}
+    100% {box-shadow: 10px -10px 0px #320046;}
+}
+
 #particles-js {
     position: absolute;
     width: 100vw;
@@ -96,6 +106,7 @@ body {
     border-radius: 25px;
     box-shadow: 10px -10px 0px #320046;
     border: 5px solid #530074;
+    animation: BoxMain 1s ease-out;
 }
 
 .CreditsScreen {
@@ -109,6 +120,8 @@ body {
     margin-bottom: 12.5vh;
     border-radius: 25px;
     border: 5px solid #530074;
+    box-shadow: 0px 0px 0px #320046;
+    animation: UnboxMain 1s ease-out;
 }
 
 .MenuBackground h1 {
@@ -226,7 +239,8 @@ body {
     margin-top: 12.5vh;
     margin-bottom: 12.5vh;
     border-radius: 25px;
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    animation: UnboxMain 1s ease-out;
+    border: 5px solid #530074;
 }
 
 .ConnectingScreen h1 {
