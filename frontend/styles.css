@@ -27,6 +27,26 @@ body {
     100% {box-shadow: 10px -10px 0px #320046;}
 }
 
+@keyframes GreenHoverBackground {
+    0% {background-color: #FFF0}
+    100% {background-color: #1113;}
+}
+
+@keyframes GreenHoverBackgroundReverse {
+    0% {background-color: #1113;}
+    100% {background-color: #FFF0}
+}
+
+@keyframes SpeechBoxApper {
+    0% {margin-top: 11vh; opacity: 0;}
+    100% {margin-top: 13vh; opacity: 100;}
+}
+
+@keyframes SpeechBoxDisapper {
+    0% {margin-top: 13vh; opacity: 100;}
+    100% {margin-top: 11vh; opacity: 0;}
+}
+
 #particles-js {
     position: absolute;
     width: 100vw;
@@ -40,6 +60,10 @@ body {
 #Loaded {
     animation: LoadedAnimation 0.3s ease-out;
     margin-top: -100vh;
+}
+
+#CopyTextSpeechBoxDisapear {
+    animation: SpeechBoxDisapper 0.3s ease-out;
 }
 
 .Menus {
@@ -315,4 +339,83 @@ body {
     border-bottom-right-radius: 25px;
     border-bottom-left-radius: 25px;
     z-index: 777777777;
+}
+
+.RoomInformation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20vw;
+    height: 10vh;
+    background-color: #FFF;
+    border-bottom-right-radius: 25px;
+    box-shadow: 0px 0px 10px #111;
+    display: flex;
+    z-index: -2;
+}
+
+.RoomIdTextPlaceHolder {
+    z-index: -1;
+    height: 10vh;
+    margin-top: 0;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    box-shadow: 1px 0 0px 0px rgba(10, 10, 10, 0.5), -1px 0 0px 0px rgba(10, 10, 10, 0.5);
+    animation: GreenHoverBackgroundReverse 0.3s ease-out;
+    cursor: pointer;
+}
+
+.RoomIdTextPlaceHolder:hover {
+    animation: GreenHoverBackground 0.3s ease-out;
+    background-color: #1113;
+}
+
+.RoomIdTextPlaceHolder .RoomIdText {
+    margin-top: 3vh;
+    font-size: 1.7vw;
+}
+
+.CopyTextSpeechBox {
+    animation: SpeechBoxApper 0.3s ease-out;
+    background-color: #AAFFAA;
+    border-radius: 5px;
+    margin: 20px;
+    width: 10vw;
+    height: 3.5vw; 
+    z-index: 0;
+    margin-left: 6.75vw;
+    margin-top: 13vh;
+}
+
+.CopyTextSpeechBox::after {
+    z-index: 0;
+    background-color: #AAFFAA;
+    content: "\00a0";
+    display: block;
+    height: 1vw;
+    left: 4.5vw;
+    position: relative;
+    top: -5px;
+    transform:             rotate( 45deg );
+        -moz-transform:    rotate( 45deg );
+        -ms-transform:     rotate( 45deg );
+        -o-transform:      rotate( 45deg );
+        -webkit-transform: rotate( 45deg );
+    width:  20px;
+}
+
+.CopyTextSpeechBox .CopyText {
+    pointer-events: none;
+    z-index: 3;
+    width: 10vw;
+    position: absolute;
+    font-size: 1.3vw;
+    margin-top: 1vw;
+    text-align: center;
+}
+
+.RoomIdTextHeader {
+    margin-left: 0.5vw;
+    margin-right: 0.5vw;
+    font-size: 1.5vw;
 }

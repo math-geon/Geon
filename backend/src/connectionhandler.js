@@ -60,9 +60,7 @@ function GenerateRoom(socket, Data) {
     PlayerScheme.Id = Data.UserId;
     RoomScheme.Players.push(PlayerScheme);
     ActiveRooms.push(RoomScheme)
-    setTimeout(()=>{
-        socket.emit('RoomId', JSON.stringify({RoomId: RoomScheme.Id}))
-    }, 2000)
+    socket.emit('RoomId', JSON.stringify({RoomId: RoomScheme.Id}))
 }
 
 function Updater(socket, Data) {
@@ -81,8 +79,10 @@ function Updater(socket, Data) {
 function verifyer(socket, executer, Data) {
     Data = JSON.parse(Data);
     var RoomContainsUser = false;
+    var RoomExists = false;
     ActiveRooms.forEach((element, index)=>{
         if (element.Id === Data.RoomId) {
+            RoomExists = true;
             ActiveRooms[index].Players.forEach((element2, index2)=>{
                 if (element2.Id === Data.UserId) {
                     RoomContainsUser = true;
@@ -92,8 +92,10 @@ function verifyer(socket, executer, Data) {
     })
     if (RoomContainsUser) {
         executer(socket, Data)
-    } else {
+    } else if (RoomExists) {
         socket.emit('ConnectionFailed');
+    } else {
+        socket.emit('RoomNotExists');
     }
 }
 
