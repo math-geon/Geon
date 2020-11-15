@@ -1,6 +1,3 @@
-//CSS Data;
-var CopyTextSpeechBox = false;
-
 function copyToClipboard(text) {
     var dummy = document.createElement("textarea");
     // to avoid breaking orgain page when copying more words

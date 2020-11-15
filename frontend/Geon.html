@@ -183,11 +183,11 @@
                     <div class="RoomInformationPlaceHolder">
                         <div class="RoomInformation">
                             <p class="RoomIdTextHeader">Id da sala: </p>
-                        <div class="RoomIdTextPlaceHolder" onclick="copyToClipboard(document.getElementById('RoomIdText').textContent); document.getElementsByClassName('CopyText')[0].textContent = 'Copiado!'" onmouseover="document.getElementsByClassName('CopyTextSpeechBox')[0].style.display = 'block'; document.getElementsByClassName('CopyText')[0].textContent = 'Copiar Código'" onmouseleave="if (CopyTextSpeechBox === false) {document.getElementsByClassName('CopyTextSpeechBox')[0].id = 'CopyTextSpeechBoxDisapear';setTimeout(()=>{document.getElementsByClassName('CopyTextSpeechBox')[0].style.display = 'none';document.getElementsByClassName('CopyTextSpeechBox')[0].id = ''}, 300)}">
+                        <div class="RoomIdTextPlaceHolder" onclick="copyToClipboard(document.getElementById('RoomIdText').textContent); document.getElementsByClassName('CopyText')[0].textContent = 'Copiado!'" onmouseover="document.getElementsByClassName('CopyTextSpeechBox')[0].style.display = 'block'; document.getElementsByClassName('CopyText')[0].textContent = 'Copiar Código'" onmouseleave="document.getElementsByClassName('CopyTextSpeechBox')[0].id = 'CopyTextSpeechBoxDisapear';setTimeout(()=>{document.getElementsByClassName('CopyTextSpeechBox')[0].style.display = 'none';document.getElementsByClassName('CopyTextSpeechBox')[0].id = ''}, 300)">
                                 <p id="RoomIdText" class="RoomIdText">1234567</p>
                             </div>
                         </div>
-                        <div class="CopyTextSpeechBox" style="display: none" onclick="copyToClipboard(document.getElementById('RoomIdText').textContent); document.getElementsByClassName('CopyText')[0].textContent = 'Copiado!'" onmouseover="CopyTextSpeechBox = true;document.getElementsByClassName('CopyTextSpeechBox')[0].style.display = 'block'; document.getElementsByClassName('CopyText')[0].textContent = 'Copiar Código'" onmouseleave="CopyTextSpeechBox=false;">
+                        <div class="CopyTextSpeechBox" style="display: none" onclick="copyToClipboard(document.getElementById('RoomIdText').textContent); document.getElementsByClassName('CopyText')[0].textContent = 'Copiado!'" onmouseover="CopyTextSpeechBox = true;document.getElementsByClassName('CopyTextSpeechBox')[0].style.display = 'block'; document.getElementsByClassName('CopyText')[0].textContent = 'Copiar Código';document.getElementsByClassName('CopyTextSpeechBox')[0].id = ''">
                             <b class="CopyText">Copiar Código</b>
                         </div>
                     </div>
