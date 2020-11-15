@@ -1,3 +1,34 @@
+var MouseSelectedText = false;
+var MouseSelectedBox = false;
+
+function BoxWrapper(Name) {
+    if (!MouseSelectedText && !MouseSelectedBox) {
+        setTimeout(()=>{
+            if (!MouseSelectedText && !MouseSelectedBox) {
+                document.getElementsByClassName(Name)[0].id = 'CopyTextSpeechBoxDisapear';
+                setTimeout(()=>{
+                    if (!MouseSelectedText && !MouseSelectedBox) {
+                        document.getElementsByClassName('CopyText')[0].textContent = 'Copiar Código';
+                        document.getElementsByClassName(Name)[0].id = '';
+                        document.getElementsByClassName(Name)[0].style.display = 'none';
+                    } else {
+                        document.getElementsByClassName('CopyText')[0].textContent = 'Copiar Código';
+                        document.getElementsByClassName(Name)[0].style.display = 'block';
+                        document.getElementsByClassName(Name)[0].id = '';
+                    }
+                }, 300);
+            } else {
+                document.getElementsByClassName('CopyText')[0].textContent = 'Copiar Código';
+                document.getElementsByClassName(Name)[0].style.display = 'block';
+                document.getElementsByClassName(Name)[0].id = '';
+            }
+        }, 500);
+    } else {
+        document.getElementsByClassName(Name)[0].style.display = 'block';
+        document.getElementsByClassName(Name)[0].id = '';
+    }
+}
+
 function copyToClipboard(text) {
     var dummy = document.createElement("textarea");
     // to avoid breaking orgain page when copying more words
