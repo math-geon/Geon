@@ -385,6 +385,7 @@ body {
     z-index: 0;
     margin-left: 6.75vw;
     margin-top: 13vh;
+    cursor: pointer;
 }
 
 .CopyTextSpeechBox::after {
@@ -402,6 +403,7 @@ body {
         -o-transform:      rotate( 45deg );
         -webkit-transform: rotate( 45deg );
     width:  20px;
+    cursor: pointer;
 }
 
 .CopyTextSpeechBox .CopyText {
@@ -412,6 +414,7 @@ body {
     font-size: 1.3vw;
     margin-top: 1vw;
     text-align: center;
+    cursor: pointer;
 }
 
 .RoomIdTextHeader {
