@@ -422,3 +422,13 @@ body {
     margin-right: 0.5vw;
     font-size: 1.5vw;
 }
+
+.BlockRoomId {
+    position: absolute;
+    width: 2.5vw;
+    height: 2.5vw;
+    margin-top: 0.3vh;
+    left: 16vw;
+    padding: 1vw;
+    cursor: pointer;
+}
