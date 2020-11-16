@@ -1,5 +1,6 @@
 var MouseSelectedText = false;
 var MouseSelectedBox = false;
+var loaded = false;
 
 function BoxWrapper(Name) {
     if (!MouseSelectedText && !MouseSelectedBox) {
@@ -44,13 +45,60 @@ function copyToClipboard(text) {
 
 var CurrentRoom = '';
 var UserId = getRandomString(12);
+var UserName = '';
 
 function Loaded() {
+    loaded = true;
+    socket.on('NewUser', (Data)=>{
+        Data = JSON.parse(Data);
+        CreateUsers(Data.EnteredUserId);
+    })
+    socket.on('UserNameInformation', (Data)=>{
+        Data = JSON.parse(Data);
+        Players = [];
+        Players = [...document.getElementsByClassName('Players')[0].children]
+        Players.forEach((element, index) => {
+            if (element.id === Data.UserId) {
+                element.innerHTML = Data.NickName;
+            }
+        })
+    })
+    socket.on('UserLeave', (Data) => {
+        Data = JSON.parse(Data);
+        document.getElementById(Data.UserLeaved).remove();
+    })
+    socket.on('RoomNotExists', () => {
+        document.getElementsByClassName("MenuBackground")[0].style.display = 'block';
+        document.getElementsByClassName("ConnectingScreen")[0].style.display = 'none';
+        document.getElementsByClassName("ProgressProgressBar")[0].style.width = '0vw';
+        document.getElementsByClassName("Menus")[0].style.display = 'block';
+        document.getElementsByClassName("Game")[0].style.display = 'none';
+        document.getElementsByClassName("UserNameInput")[0].id = '';
+        document.getElementsByClassName("UserNameInput")[0].style.display = 'none';
+        document.getElementsByClassName("RoomNotFounded")[0].style.display = 'block';
+    })
+    document.getElementsByClassName('RoomForm')[0].addEventListener('submit', PlayRoomIdBlockAndExecute)
     socket.on('reconnect', ()=>{
        newUserId = getRandomString(12);
         oldUserId = UserId
-        socket.emit('Reconnector', JSON.parse({oldUserId: oldUserId, userId: newUserId}));
+        socket.emit('Reconnector', JSON.stringify({oldUserId: oldUserId, userId: newUserId}));
+        Players = [...document.getElementsByClassName('Players')[0].children]
+        Players.forEach((element, index) => {
+            if (element.id === oldUserId) {
+                element.id = newUserId;
+            }
+        })
         UserId = newUserId;
+    })
+
+    socket.on('UpdateUserId', (Data) => {
+        Data = JSON.parse(Data);
+        Players = [...document.getElementsByClassName('Players')[0].children]
+        Players.forEach((element, index) => {
+            if (element.id === Data.OldId) {
+                element.id = Data.NewId;
+            }
+        })
     })
 
     socket.on('ConnectionFailed', () => {
@@ -71,7 +119,8 @@ function StartGame() {
     document.getElementsByClassName("MenuBackground")[0].style.display = 'none';
     document.getElementsByClassName("ConnectingScreen")[0].style.display = 'block';
     document.getElementsByClassName("ProgressProgressBar")[0].style.width = '0vw';
-    socket.emit('EnterRoom')
+    CurrentRoom = document.getElementsByClassName('RoomId')[0].value;
+    StartTheGame(CurrentRoom)
 }
 
 function RoomIdHandler() {
@@ -126,13 +175,54 @@ function CreateGame() {
         CurrentRoom = Data.RoomId;
         ProgressbarHandler("ProgressProgressBar", "49.5", "100");
         setTimeout(()=>{
-            StartTheGame();
-        },2000)
+            StartTheGame(CurrentRoom);
+        },1000)
     })
 }
 
-function StartTheGame() {
-    document.getElementsByClassName("Menus")[0].style.display = 'none';
-    document.getElementsByClassName("Game")[0].style.display = 'block';
-    document.getElementsByClassName("RoomIdText")[0].innerHTML = CurrentRoom;
+function UsernameHandler() {
+    if (document.getElementsByClassName('UserTextInput')[0].value.length > 0) {
+        document.getElementsByClassName('UserTextSubmit')[0].disabled = false;
+    } else {
+        document.getElementsByClassName('UserTextSubmit')[0].disabled = true;
+    }
+}
+
+function UserNameSubmit(event) {
+    event.preventDefault();
+    UserName = document.getElementsByClassName('UserTextInput')[0].value;
+    socket.emit('RegisterUserName', JSON.stringify({RoomId: CurrentRoom, UserId: UserId, UserName: UserName}))
+    document.getElementsByClassName('UserNameInput')[0].id = 'popup-close';
+    setTimeout(()=>{
+        document.getElementsByClassName('UserNameInput')[0].id = 'popup-close';
+        document.getElementsByClassName('UserNameInput')[0].style.display = 'none';
+    }, 300)
+}
+
+function StartTheGame(RoomID) {
+    function WaitLoad() {
+        if (loaded === false) {
+            setTimeout(()=>{WaitLoad()}, 2500)
+        } else {
+            socket.emit('RegisterUser', JSON.stringify({RoomId: RoomID, UserId: UserId}))
+            document.getElementsByClassName('userInput')[0].addEventListener('submit', UserNameSubmit)
+            document.getElementsByClassName("Menus")[0].style.display = 'none';
+            document.getElementsByClassName("Game")[0].style.display = 'block';
+            document.getElementsByClassName("RoomIdText")[0].innerHTML = RoomID;
+            document.getElementsByClassName("UserNameInput")[0].id = 'popup';
+            document.getElementsByClassName("UserNameInput")[0].style.display = 'block';
+            document.getElementsByClassName('UserTextInput')[0].value = UserName;
+            setTimeout(()=>{document.getElementsByClassName("UserNameInput")[0].id = '';}, 300)
+        }
+    }
+    WaitLoad()
+}
+
+function CreateUsers(id) {
+    document.getElementsByClassName('Players')[0].innerHTML += '<div id="'+id+'" class="PlayerWrapper">Aguardando...</div>'
+}
+
+function PlayRoomIdBlockAndExecute(event) {
+    event.preventDefault();
+    StartGame();
 }

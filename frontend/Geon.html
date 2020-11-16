@@ -147,13 +147,21 @@
                     <div class="ErrorEffect"></div>
                 </div>
             </div>
+            <div class="RoomNotFounded" style="display: none">
+                <div class="ErrorBox">
+                    <h1 class="ErrorTextTitle">Sala Inexistente!</h1>
+                    <h1 class="ErrorTextDescription">Não foi possivel localizar essa sala.</h1>
+                    <button class="CloseWarn" onclick="document.getElementsByClassName('RoomNotFounded')[0].style.display = 'none'">Ok</button>
+                    <div class="ErrorEffect"></div>
+                </div>
+            </div>
             <div class="LoadingScreen" style="display: block">
                 <h1 class="LoadingText">Carregando...</h1>
                 <div class="ProgressBarBeforeGame">
                     <div class="ProgressProgressBarBeforeGame"></div>
                 </div>
             </div>
-            <div class="Menus">
+            <div class="Menus" style="display: block">
                 <div id="particles-js" style="width: 100vw; height: 100vh">
                 </div>
                 <div class="MenuBackground">
@@ -186,11 +194,23 @@
                             <div class="RoomIdTextPlaceHolder" onclick="copyToClipboard(CurrentRoom); document.getElementsByClassName('CopyText')[0].textContent = 'Copiado!'" onmouseover="MouseSelectedText = true;BoxWrapper('CopyTextSpeechBox')" onmouseleave="MouseSelectedText = false;BoxWrapper('CopyTextSpeechBox')">
                                 <p id="RoomIdText" class="RoomIdText">1234567</p>
                             </div>
-                        <img class="BlockRoomId" title="Ocultar código" src="https://www.shareicon.net/data/256x256/2015/09/15/101587_block_512x512.png" onclick="if (document.getElementById('RoomIdText').textContent !== 'Oculto!') {document.getElementById('RoomIdText').textContent = 'Oculto!'; document.getElementsByClassName('BlockRoomId')[0].src=`https://lh3.googleusercontent.com/proxy/RGFQLRECdn8yDZFrkRlj-o_RAz4784lUS4_5zpwqKxBNvu94Qt3LdPt-KrerN5BrAi43PuR_97t_uTQO-E6Sw2mP4MU1pxLKJCJ3mhL98Hcq2c1bXA`; document.getElementsByClassName('BlockRoomId')[0].title='Mostrar código'} else {document.getElementById('RoomIdText').textContent = CurrentRoom; document.getElementsByClassName('BlockRoomId')[0].src=`https://www.shareicon.net/data/256x256/2015/09/15/101587_block_512x512.png`; document.getElementsByClassName('BlockRoomId')[0].title='Bloquear código'}"></img>
+                        <img class="BlockRoomId" title="Esconder código" src="/resources/blockicon.png" onclick="if (document.getElementById('RoomIdText').textContent !== 'Oculto!') {document.getElementById('RoomIdText').textContent = 'Oculto!'; document.getElementsByClassName('BlockRoomId')[0].src=`/resources/allowicon.png`; document.getElementsByClassName('BlockRoomId')[0].title='Mostrar código'} else {document.getElementById('RoomIdText').textContent = CurrentRoom; document.getElementsByClassName('BlockRoomId')[0].src=`/resources/blockicon.png`; document.getElementsByClassName('BlockRoomId')[0].title='Esconder código'}"></img>
                         </div>
                         <div class="CopyTextSpeechBox" style="display: none" onclick="copyToClipboard(CurrentRoom); document.getElementsByClassName('CopyText')[0].textContent = 'Copiado!'" onmouseover="MouseSelectedBox = true;BoxWrapper('CopyTextSpeechBox')" onmouseleave="MouseSelectedBox = false;BoxWrapper('CopyTextSpeechBox')">
                             <b class="CopyText">Copiar Código</b>
                         </div>
+                    </div>
+                    <div class="UserNameInput" style="display: none">
+                        <p class="UserNameHeader">Nome de usuário:</p>
+                        <p class="FormText">Insira seu nome de usuário: <t class="LittleWarn">(Ele estará visivel para todos na sala)</t></p>
+                        <form class="userInput">
+                            <input class="UserTextInput" required='required' type="text" placeholder="Um nome muito legal!" onInput="UsernameHandler()" onPropertychange="UsernameHandler()">
+                            <input class="UserTextSubmit" type="submit" value="Pronto!" disabled>
+                        </form>      
+                    </div>
+                    <div class="PlayerInTheRoom">
+                        <p class="PlayerInTheRoomHeader">Jogadores na sala:</p>
+                        <div class="Players"></div>
                     </div>
                 </div>
             </div>

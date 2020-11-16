@@ -1,15 +1,19 @@
-var ActiveRooms = []
-var ids = [];
-var cleaning = false;
+ActiveRooms = []
+ids = [];
+cleaning = false;
 
 function cleaner() {
     if (!cleaning) {
         cleaning = true;
         setTimeout(()=> {
+            if (ids.length < 1) {return};
             ActiveRooms.forEach((element, index) => {
                 element.Players.forEach((element2, index2) => {
                     if (!ids.includes(element2.Id)) {
                         ActiveRooms[index].Players.splice(index2,1);
+                        ActiveRooms[index].Players.forEach((element3) => {
+                            element3.socket.emit('UserLeave', JSON.stringify({RoomId: element.Id, UserLeaved: element2.Id}))
+                        })
                     }
                 })
             })
@@ -39,13 +43,14 @@ function reconnect(socket) {
 }
 
 function GenerateRoom(socket, Data) {
-    const RoomScheme = {
+    RoomScheme = {
         Id: '',
         Players : [],
     }
     
-    const PlayerScheme = {
+    PlayerScheme = {
         Id: "",
+        socket,
         Name: "",
     }
     Data = JSON.parse(Data);
@@ -57,8 +62,6 @@ function GenerateRoom(socket, Data) {
         }
     })
     RoomScheme.Id = RoomId;
-    PlayerScheme.Id = Data.UserId;
-    RoomScheme.Players.push(PlayerScheme);
     ActiveRooms.push(RoomScheme)
     socket.emit('RoomId', JSON.stringify({RoomId: RoomScheme.Id}))
 }
@@ -71,12 +74,17 @@ function Updater(socket, Data) {
                 ActiveRooms[index].Players[index2].Id = Data.userId;
                 ids.push(Data.userId);
                 cleaner();
+            } else {
+                element2.socket.emit("UpdateUserId", JSON.stringify({RoomId: element.Id, OldId: Data.oldUserId, NewId: Data.userId}))
             }
         })
     })
 }
 
-function verifyer(socket, executer, Data) {
+function verifyer(socket, executer, Data, UserIn) {
+    if (UserIn === undefined) {
+        UserIn = true;
+    }
     Data = JSON.parse(Data);
     var RoomContainsUser = false;
     var RoomExists = false;
@@ -90,13 +98,67 @@ function verifyer(socket, executer, Data) {
             })
         }    
     })
-    if (RoomContainsUser) {
+    if ((RoomContainsUser && UserIn) || (RoomExists && !UserIn)) {
         executer(socket, Data)
-    } else if (RoomExists) {
+    } else if (RoomExists && UserIn) {
         socket.emit('ConnectionFailed');
     } else {
         socket.emit('RoomNotExists');
     }
+}
+
+function LogUserIn(socket, Data) {
+    RoomAlreadyContainsUser = false;
+    ActiveRooms.forEach((element, index)=>{
+        if (element.Id === Data.RoomId) {
+            ActiveRooms[index].Players.forEach((element2)=>{
+                if (element2.Id === Data.UserId) {
+                    RoomAlreadyContainsUser = true;
+                }
+            })
+        }    
+    })
+    if (!RoomAlreadyContainsUser) {
+        RoomIndex = 0;
+        ActiveRooms.forEach((element, index)=>{
+            if (element.Id === Data.RoomId) {
+                RoomIndex = index;
+                ActiveRooms[index].Players.forEach((element2)=>{
+                    element2.socket.emit('NewUser', JSON.stringify({RoomId: element.Id, EnteredUserId: Data.UserId}))
+                    socket.emit('NewUser', JSON.stringify({RoomId: element.Id, EnteredUserId: element2.Id}))
+                })
+            }    
+        })
+        PlayerScheme = {
+            Id: "",
+            socket,
+            Name: "",
+        }
+        PlayerScheme.Id = Data.UserId;
+        PlayerScheme.socket = socket;
+        ActiveRooms[RoomIndex].Players.push(PlayerScheme);
+        socket.emit('NewUser', JSON.stringify({RoomId: Data.RoomId, EnteredUserId: Data.UserId}))
+    }
+}
+
+function RegisterUserName(socket, Data) {
+    ActiveRooms.forEach((element, index)=>{
+        if (element.Id === Data.RoomId) {
+            ActiveRooms[index].Players.forEach((element2, index2)=>{
+                if (element2.Id === Data.UserId) {
+                    ActiveRooms[index].Players[index2].Name = Data.UserName;
+                }
+                socket.emit('UserNameInformation', JSON.stringify({RoomId: element.Id, UserId: element2.Id, NickName: element2.Name}))
+            })
+        }    
+    })
+    ActiveRooms.forEach((element) => {
+        element.Players.forEach((element2) => {
+            element.Players.forEach((element3) => {
+                element2.socket.emit('UserNameInformation', JSON.stringify({RoomId: element.Id, UserId: element3.Id, NickName: element3.Name}))
+            })
+        })
+    })
 }
 
 module.exports = (io) => {
@@ -104,5 +166,7 @@ module.exports = (io) => {
         socket.on('GenerateRoom', (Data) => {GenerateRoom(socket, Data)});
         socket.on('disconnect', () => {reconnect(socket)});
         socket.on('Reconnector', (Data) => {Updater(socket, Data)});
+        socket.on('RegisterUser', (Data) => {verifyer(socket, LogUserIn, Data, false)})
+        socket.on('RegisterUserName', (Data) => {verifyer(socket, RegisterUserName, Data)})
     });
 };

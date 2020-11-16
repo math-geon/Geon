@@ -47,6 +47,16 @@ body {
     100% {margin-top: 11vh; opacity: 0;}
 }
 
+@keyframes PopupApper {
+    0% {transform: translateY(100%); opacity: 0;}
+    100% {transform: translateY(0%); opacity: 100;}
+}
+
+@keyframes PopupDisapper {
+    0% {transform: translateY(0%); opacity: 100;}
+    100% {transform: translateY(100%); opacity: 0;}
+}
+
 #particles-js {
     position: absolute;
     width: 100vw;
@@ -64,6 +74,14 @@ body {
 
 #CopyTextSpeechBoxDisapear {
     animation: SpeechBoxDisapper 0.3s ease-out;
+}
+
+#popup {
+    animation: PopupApper 0.3s ease-out;
+}
+
+#popup-close {
+    animation: PopupDisapper 0.3s ease-in;
 }
 
 .Menus {
@@ -328,6 +346,7 @@ body {
     position: absolute;
     font-size: 3vw;
     margin-top: 10vh;
+    text-align: center;
 }
 
 .ErrorScreen .ErrorBox .ErrorEffect {
@@ -345,7 +364,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 20vw;
+    width: 21vw;
     height: 10vh;
     background-color: #FFF;
     border-bottom-right-radius: 25px;
@@ -376,6 +395,7 @@ body {
 }
 
 .CopyTextSpeechBox {
+    position: absolute;
     animation: SpeechBoxApper 0.3s ease-out;
     background-color: #AAFFAA;
     border-radius: 5px;
@@ -428,7 +448,224 @@ body {
     width: 2.5vw;
     height: 2.5vw;
     margin-top: 0.3vh;
-    left: 16vw;
+    left: 17vw;
     padding: 1vw;
     cursor: pointer;
+}
+
+.UserNameInput {
+    position: absolute;
+    width: 50vw;
+    height: 50vh;
+    margin-left: 25vw;
+    margin-top: 25vh;
+    border: 5px solid #530074;
+    border-radius: 25px;
+    box-shadow: 0px 0px 15px #111;
+}
+
+.UserNameHeader {
+    position: absolute;
+    background-color: #530074;
+    width: 50vw;
+    margin-top: 0;
+    height: 3vw;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    color: #FFFFFF;
+    font-size: 2.5vw;
+    text-align: center;
+}
+
+.UserNameInput .LittleWarn {
+    color: rgb(255, 73, 73);
+}
+
+.FormText {
+    font-size: 2vw;
+    text-align: center;
+    margin-top: 5vw;
+}
+
+.UserTextSubmit {
+    position: absolute;
+    width: 7vw;
+    height: 3vw;
+    border-radius: 250px;
+    bottom: 10vh;
+    background-color: #FFF;
+    -webkit-appearance:     none;
+    -moz-appearance:        none;
+    -ms-appearance:         none;
+    -o-appearance:          none;
+    appearance:             none;
+    outline: none;
+    color: #530074;
+    font-size: 1.5vw;
+    border: 2px solid #530074;
+    box-shadow: 0px 0px 0px #530074;
+    animation: PlayButtonAnimReverse 0.3s ease-out;
+    cursor: pointer;
+    right: 1vw;
+    bottom: 1vw;
+}
+
+.UserTextSubmit:hover {
+    animation: PlayButtonAnim 0.3s ease-out;
+    box-shadow: 5px -5px 0px #530074;
+}
+
+.UserTextSubmit:disabled {
+    border: 2px solid #222;
+    background-color: #CCC;
+    box-shadow: 0px 0px 0px #222;
+    -webkit-animation: none !important;
+    -moz-animation: none !important;
+    -o-animation: none !important;
+    -ms-animation: none !important;
+    animation: none !important;
+    cursor: not-allowed;
+    color: #222;
+}
+
+.UserTextInput {
+    width: 45vw;
+    margin-left: 2.5vw;
+    height: 10vh;
+    border-radius: 25px;
+    border: 2px solid #530074;
+    text-align: center;
+    color: #530074;
+    font-size: 3vw;
+    -webkit-appearance:     none;
+    -moz-appearance:        none;
+    -ms-appearance:         none;
+    -o-appearance:          none;
+    appearance:             none;
+    outline: none;
+}
+
+.PlayerInTheRoom {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 21vw;
+    min-height: 10vw;
+    height: auto;
+    background-color: #FFF;
+    border-bottom-left-radius: 25px;
+    box-shadow: 0px 0px 10px #111;
+    display: flex;
+    z-index: -2;   
+    padding-bottom: 2vw;
+}
+
+.PlayerInTheRoomHeader {
+    position: absolute;
+    font-size: 2vw;
+    height: 3vw;
+    top: 0.5vw;
+    margin: 0;
+    width: 21vw;
+    text-align: center;
+    box-shadow: 0px 1px 0px 0px rgba(10, 10, 10, 1);
+    z-index: 5;
+}
+
+.PlayerInTheRoom .Players {
+    position: relative;
+    display: flex;
+    width: 21vw;
+    margin-top: 3.5vw;
+    min-height: 10vw;
+    height: auto;
+    flex-direction: column;
+}
+
+.PlayerWrapper {
+    font-size: 1.5vw;
+    height: 2.5vw;
+    padding-top: 1vw;
+    width: 21vw;
+    box-shadow: 0px 1px 0px 0px rgba(10, 10, 10, 1);
+    text-align: center;
+}
+
+.RoomNotFounded {
+    position: absolute;
+    z-index: 1000000000000;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    background-color: #FF5555DD;
+}
+
+.RoomNotFounded .ErrorBox {
+    position: absolute;
+    left: 25vw;
+    top: 25vh;
+    width: 50vw;
+    height: 50vh;
+    background-color: #FFF;
+    border-radius: 25px;
+}
+
+.RoomNotFounded .ErrorBox .ErrorTextTitle {
+    position: absolute;
+    width: 50vw;
+    background-color: #FFAA00;
+    height: 10vh;
+    margin-top: -5vh;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    color: #FFF;
+    text-align: center;
+    font-size: 4vw;
+}
+
+.RoomNotFounded .ErrorBox .ErrorTextDescription {
+    position: absolute;
+    font-size: 3vw;
+    margin-top: 10vh;
+    text-align: center;
+}
+
+.RoomNotFounded .ErrorBox .ErrorEffect {
+    position: absolute;
+    background-color: #530074;
+    width: 50vw;
+    height: 4vh;
+    top: 46.5vh;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    z-index: 777777777;
+}
+
+.RoomNotFounded .ErrorBox .CloseWarn {
+    position: absolute;
+    width: 7vw;
+    height: 3vw;
+    border-radius: 250px;
+    bottom: 10vh;
+    background-color: #FFF;
+    -webkit-appearance:     none;
+    -moz-appearance:        none;
+    -ms-appearance:         none;
+    -o-appearance:          none;
+    appearance:             none;
+    outline: none;
+    color: #530074;
+    font-size: 1.5vw;
+    border: 2px solid #530074;
+    box-shadow: 0px 0px 0px #530074;
+    animation: PlayButtonAnimReverse 0.3s ease-out;
+    cursor: pointer;
+    right: 1vw;
+    bottom: 2.5vw;
+}
+
+.RoomNotFounded .ErrorBox .CloseWarn:hover {
+    animation: PlayButtonAnim 0.3s ease-out;
+    box-shadow: 5px -5px 0px #530074;
 }
