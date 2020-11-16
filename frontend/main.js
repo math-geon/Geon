@@ -57,7 +57,10 @@ function Loaded() {
         Data = JSON.parse(Data);
         Players = [];
         Players = [...document.getElementsByClassName('Players')[0].children]
-        Players.forEach((element, index) => {
+        Data.NickName = Data.NickName.split(">").join(" ")
+        Data.NickName = Data.NickName.split("<").join(" ")
+        Data.NickName = Data.NickName.split("/").join(" ")
+        Players.forEach((element) => {
             if (element.id === Data.UserId) {
                 element.innerHTML = Data.NickName;
             }
@@ -66,6 +69,16 @@ function Loaded() {
     socket.on('UserLeave', (Data) => {
         Data = JSON.parse(Data);
         document.getElementById(Data.UserLeaved).remove();
+    })
+    socket.on('FullRoom', () => {
+        document.getElementsByClassName("MenuBackground")[0].style.display = 'block';
+        document.getElementsByClassName("ConnectingScreen")[0].style.display = 'none';
+        document.getElementsByClassName("ProgressProgressBar")[0].style.width = '0vw';
+        document.getElementsByClassName("Menus")[0].style.display = 'block';
+        document.getElementsByClassName("Game")[0].style.display = 'none';
+        document.getElementsByClassName("UserNameInput")[0].id = '';
+        document.getElementsByClassName("UserNameInput")[0].style.display = 'none';
+        document.getElementsByClassName('RoomFulled')[0].style.display = 'block';
     })
     socket.on('RoomNotExists', () => {
         document.getElementsByClassName("MenuBackground")[0].style.display = 'block';
@@ -181,6 +194,9 @@ function CreateGame() {
 }
 
 function UsernameHandler() {
+    if (document.getElementsByClassName('UserTextInput')[0].value.length > 16) {
+        document.getElementsByClassName('UserTextInput')[0].value = document.getElementsByClassName('UserTextInput')[0].value.slice(0,16);
+    }
     if (document.getElementsByClassName('UserTextInput')[0].value.length > 0) {
         document.getElementsByClassName('UserTextSubmit')[0].disabled = false;
     } else {
