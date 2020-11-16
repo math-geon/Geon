@@ -57,7 +57,10 @@ function Loaded() {
         Data = JSON.parse(Data);
         Players = [];
         Players = [...document.getElementsByClassName('Players')[0].children]
-        Players.forEach((element, index) => {
+        Data.NickName = Data.NickName.split(">").join(" ")
+        Data.NickName = Data.NickName.split("<").join(" ")
+        Data.NickName = Data.NickName.split("/").join(" ")
+        Players.forEach((element) => {
             if (element.id === Data.UserId) {
                 element.innerHTML = Data.NickName;
             }
