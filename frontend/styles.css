@@ -792,3 +792,20 @@ body {
     overflow: hidden;
     background-clip: unset;
 }
+
+.CreditsScreen span {
+    font-size: 2.3vw;
+    color: #222;
+    margin-left: 2vw;
+    margin-top: 2vh;
+}
+
+.CreditsScreen a {
+    color: #530074;
+}
+
+.CreditsScreen .EasterEgg {
+    text-decoration: none;
+    cursor: text;
+    color: #222;
+}
