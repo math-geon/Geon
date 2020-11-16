@@ -143,14 +143,14 @@
             <div class="ErrorScreen" style="display: none">
                 <div class="ErrorBox">
                     <h1 class="ErrorTextTitle">Conexão Perdida!</h1>
-                    <h1 class="ErrorTextDescription">Não foi possivel se conectar ao servidor.</h1>
+                    <h1 class="ErrorTextDescription">Não foi possivel conectar-se ao servidor.</h1>
                     <div class="ErrorEffect"></div>
                 </div>
             </div>
             <div class="RoomNotFounded" style="display: none">
                 <div class="ErrorBox">
                     <h1 class="ErrorTextTitle">Sala Inexistente!</h1>
-                    <h1 class="ErrorTextDescription">Não foi possivel localizar essa sala.</h1>
+                    <h1 class="ErrorTextDescription">Não foi possivel localizar esta sala.</h1>
                     <button class="CloseWarn" onclick="document.getElementsByClassName('RoomNotFounded')[0].style.display = 'none'">Ok</button>
                     <div class="ErrorEffect"></div>
                 </div>
@@ -170,14 +170,14 @@
                         <input class="RoomId" placeholder="Código da sala" onInput="RoomIdHandler()" onPropertychange="RoomIdHandler()"></input>
                     </form>
                     <div class="Buttons">
-                        <button class="CreditsButton" onclick="Credits()">Creditos</button>
+                        <button class="CreditsButton" onclick="Credits()">Créditos</button>
                         <button class="PlayButton" onclick="StartGame()" disabled>Jogar</button>
                         <button class="CreateRoom" onclick="CreateGame()">Criar Sala</button>
                     </div>
                 </div>
                 <div class="CreditsScreen" style="display: none">
                     <button class="BackToMainMenuFromCredits" onclick="BackToMainMenu('Credits')">Voltar</button>
-                    <h1 class="CreditsHeader">Creditos:</h1>
+                    <h1 class="CreditsHeader">Créditos:</h1>
                 </div>
                 <div class="ConnectingScreen" style="display: none">
                     <h1 class="ConnectingText">Conectando ao servidor...</h1>
@@ -190,7 +190,7 @@
                 <div class="UI">
                     <div class="RoomInformationPlaceHolder">
                         <div class="RoomInformation">
-                            <p class="RoomIdTextHeader">Id da sala: </p>
+                            <p class="RoomIdTextHeader">ID da sala: </p>
                             <div class="RoomIdTextPlaceHolder" onclick="copyToClipboard(CurrentRoom); document.getElementsByClassName('CopyText')[0].textContent = 'Copiado!'" onmouseover="MouseSelectedText = true;BoxWrapper('CopyTextSpeechBox')" onmouseleave="MouseSelectedText = false;BoxWrapper('CopyTextSpeechBox')">
                                 <p id="RoomIdText" class="RoomIdText">1234567</p>
                             </div>
@@ -202,7 +202,7 @@
                     </div>
                     <div class="UserNameInput" style="display: none">
                         <p class="UserNameHeader">Nome de usuário:</p>
-                        <p class="FormText">Insira seu nome de usuário: <t class="LittleWarn">(Ele estará visivel para todos na sala)</t></p>
+                        <p class="FormText">Insira seu nome de usuário: <t class="LittleWarn">(Ele estará visível para todos na sala)</t></p>
                         <form class="userInput">
                             <input class="UserTextInput" required='required' type="text" placeholder="Um nome muito legal!" onInput="UsernameHandler()" onPropertychange="UsernameHandler()">
                             <input class="UserTextSubmit" type="submit" value="Pronto!" disabled>

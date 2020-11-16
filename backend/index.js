@@ -19,5 +19,5 @@ connection(io);
 
 //Liga o servidor.
 http.listen('3000', ()=>{
-    console.log("Connectado com a porta: 3000")
+    console.log("Conectado com a porta: 3000")
 });
