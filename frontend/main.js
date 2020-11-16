@@ -194,6 +194,9 @@ function CreateGame() {
 }
 
 function UsernameHandler() {
+    if (document.getElementsByClassName('UserTextInput')[0].value.length > 16) {
+        document.getElementsByClassName('UserTextInput')[0].value = document.getElementsByClassName('UserTextInput')[0].value.slice(0,16);
+    }
     if (document.getElementsByClassName('UserTextInput')[0].value.length > 0) {
         document.getElementsByClassName('UserTextSubmit')[0].disabled = false;
     } else {

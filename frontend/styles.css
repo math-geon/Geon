@@ -366,7 +366,7 @@ body {
     left: 0;
     width: 21vw;
     height: 10vh;
-    background-color: #FFF;
+    background-color: #FFFC;
     border-bottom-right-radius: 25px;
     box-shadow: 0px 0px 10px #111;
     display: flex;
@@ -460,6 +460,7 @@ body {
     margin-left: 25vw;
     margin-top: 25vh;
     border: 5px solid #530074;
+    background-color: #FFF;
     border-radius: 25px;
     box-shadow: 0px 0px 15px #111;
 }
@@ -552,7 +553,7 @@ body {
     width: 21vw;
     min-height: 10vw;
     height: auto;
-    background-color: #FFF;
+    background-color: #FFFC;
     border-bottom-left-radius: 25px;
     box-shadow: 0px 0px 10px #111;
     display: flex;
@@ -747,4 +748,49 @@ body {
 .RoomFulled .ErrorBox .CloseWarn:hover {
     animation: PlayButtonAnim 0.3s ease-out;
     box-shadow: 5px -5px 0px #530074;
+}
+
+.box {
+    background-image: url('/resources/TableBlock.jpg');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    border: 0.1vw solid 530074;
+    overflow: hidden;
+    background-clip: unset;
+}
+
+.Game .board {
+    z-index: -3;
+    position: absolute;
+    bottom: 5vh;
+    display: grid;
+    left: 15vw;
+    grid-template-columns: 7vw 7vw 7vw 7vw 7vw 7vw 7vw 7vw 7vw 7vw;
+    grid-template-rows: 7vw 7vw 7vw 7vw 7vw 7vw;
+    justify-content: center;
+    background-color: #1113;
+    box-shadow: 0px 0px 10px #111;
+    border-radius: 25px;
+    overflow: hidden;
+}
+
+.Game {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('/resources/GameBackground.png');
+    z-index: -30000;
+    background-size: 100% 100%;
+}
+
+.board .Start {
+    background-image: url('/resources/StartBlock.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    border: 0.1vw solid #530074;
+    overflow: hidden;
+    background-clip: unset;
 }
