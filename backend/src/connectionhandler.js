@@ -1,3 +1,5 @@
+const RoomMaxPersons = 4;
+
 ActiveRooms = []
 ids = [];
 cleaning = false;
@@ -111,6 +113,10 @@ function LogUserIn(socket, Data) {
     RoomAlreadyContainsUser = false;
     ActiveRooms.forEach((element, index)=>{
         if (element.Id === Data.RoomId) {
+            if (ActiveRooms[index].Players.length >= RoomMaxPersons) {
+                socket.emit('FullRoom');
+                RoomAlreadyContainsUser = true;
+            }
             ActiveRooms[index].Players.forEach((element2)=>{
                 if (element2.Id === Data.UserId) {
                     RoomAlreadyContainsUser = true;

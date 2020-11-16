@@ -669,3 +669,82 @@ body {
     animation: PlayButtonAnim 0.3s ease-out;
     box-shadow: 5px -5px 0px #530074;
 }
+
+.RoomFulled {
+    position: absolute;
+    z-index: 1000000000000;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    background-color: #FF5555DD;
+}
+
+.RoomFulled .ErrorBox {
+    position: absolute;
+    left: 25vw;
+    top: 25vh;
+    width: 50vw;
+    height: 50vh;
+    background-color: #FFF;
+    border-radius: 25px;
+}
+
+.RoomFulled .ErrorBox .ErrorTextTitle {
+    position: absolute;
+    width: 50vw;
+    background-color: #FFAA00;
+    height: 10vh;
+    margin-top: -5vh;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    color: #FFF;
+    text-align: center;
+    font-size: 4vw;
+}
+
+.RoomFulled .ErrorBox .ErrorTextDescription {
+    position: absolute;
+    font-size: 3vw;
+    margin-top: 10vh;
+    text-align: center;
+}
+
+.RoomFulled .ErrorBox .ErrorEffect {
+    position: absolute;
+    background-color: #530074;
+    width: 50vw;
+    height: 4vh;
+    top: 46.5vh;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    z-index: 777777777;
+}
+
+.RoomFulled .ErrorBox .CloseWarn {
+    position: absolute;
+    width: 7vw;
+    height: 3vw;
+    border-radius: 250px;
+    bottom: 10vh;
+    background-color: #FFF;
+    -webkit-appearance:     none;
+    -moz-appearance:        none;
+    -ms-appearance:         none;
+    -o-appearance:          none;
+    appearance:             none;
+    outline: none;
+    color: #530074;
+    font-size: 1.5vw;
+    border: 2px solid #530074;
+    box-shadow: 0px 0px 0px #530074;
+    animation: PlayButtonAnimReverse 0.3s ease-out;
+    cursor: pointer;
+    right: 1vw;
+    bottom: 2.5vw;
+}
+
+.RoomFulled .ErrorBox .CloseWarn:hover {
+    animation: PlayButtonAnim 0.3s ease-out;
+    box-shadow: 5px -5px 0px #530074;
+}
