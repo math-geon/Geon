@@ -18,6 +18,7 @@
             <script class="ParticleRunner">
                 function tryer() { 
                     try{ 
+                        document.getElementsByClassName('active')[0].click();
                         particlesJS("particles-js", {
                             particles: {
                                 number: {
@@ -139,6 +140,17 @@
                     }
                 }; 
                 tryer()
+            </script>
+            <div vw class="enabled">
+                <div vw-access-button class="active">
+                </div>
+                <div vw-plugin-wrapper>
+                  <div class="vw-plugin-top-wrapper"></div>
+                </div>
+              </div>
+              <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+              <script>
+                new window.VLibras.Widget('https://vlibras.gov.br/app');
             </script>
             <div class="ErrorScreen" style="display: none">
                 <div class="ErrorBox">
