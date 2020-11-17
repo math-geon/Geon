@@ -8,17 +8,24 @@
 
 [vw] [vw-plugin-wrapper] {
     background: transparent !important;
-    -moz-border-radius: 0px !important;
+    -moz-border-radius: 0vw !important;
+    -moz-border-top-right-radius: 2vw !important;
+    -moz-border-top-left-radius: 2vw !important;
     -moz-box-shadow: 0px 0px 0px 0px transparent !important;
-    -webkit-border-radius: 0px !important;
+    -webkit-border-radius: 0vw !important;
+    -webkit-border-top-left-radius: 2vw !important;
+    -webkit-border-top-right-radius: 2vw !important;
     -webkit-box-shadow: 0px 0px 0px 0px transparent !important;
     box-shadow: 0px 0px 0px 0px transparent !important;
-    border-radius: 0px !important;
+    border-radius: 0vw !important;
+    border-top-left-radius: 2vw !important;
+    border-top-right-radius: 2vw !important;
 }
 
 div[vw] {
     bottom: 0 !important;
     pointer-events: none !important;
+    top: unset !important;
 }
 
 div[vw] [vp] [vp-controls] {
