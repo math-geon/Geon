@@ -141,17 +141,16 @@
                 }; 
                 tryer()
             </script>
-            <div vw class="enabled">
-                <div vw-access-button class="active">
+                <div vw class="enabled">
+                    <div vw-access-button class="active"></div>
+                    <div vw-plugin-wrapper>
+                        <div class="vw-plugin-top-wrapper"></div>
+                    </div>
                 </div>
-                <div vw-plugin-wrapper>
-                  <div class="vw-plugin-top-wrapper"></div>
-                </div>
-              </div>
-              <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-              <script>
-                new window.VLibras.Widget('https://vlibras.gov.br/app');
-            </script>
+                <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+                <script>
+                    new window.VLibras.Widget('https://vlibras.gov.br/app');
+                </script>
             <div class="ErrorScreen" style="display: none">
                 <div class="ErrorBox">
                     <h1 class="ErrorTextTitle">Conexão Perdida!</h1>
@@ -198,12 +197,12 @@
                 <div class="CreditsScreen" style="display: none">
                     <button class="BackToMainMenuFromCredits" onclick="BackToMainMenu('Credits')">Voltar</button>
                     <h1 class="CreditsHeader">Créditos:</h1>
-                    <span><a href="https://github.com/emanuelfranklyn" target="_blank" >Emanuel <a target="_blank" href="https://www.talesgardem.com.br/">Franklyn</a></a>: <a target="_blank" class="EasterEgg" href="https://www.youtube.com/watch?v=KvJHqk4IgGE">Programação do jogo.</a></span><br/>
-                    <span><a target="_blank" href="https://twitter.com/wTOPwOficial">Emmanuel Florêncio</a>: Game Desiner, criação de regras.</span><br/>
+                    <span><a href="https://github.com/emanuelfranklyn" target="_blank" >Emanuel <a target="_blank" href="https://www.talesgardem.com.br/">Franklyn</a></a>: <a target="_blank" class="EasterEgg" href="https://www.youtube.com/watch?v=KvJHqk4IgGE">Instrutor de programação do jogo.</a></span><br/>
+                    <span><a target="_blank" href="https://twitter.com/wTOPwOficial">Emmanuel Florêncio</a>: Game Designer, criação de regras.</span><br/>
                     <span><a target="_blank" href="https://www.instagram.com/_filipin_s/">Filipe Santos</a>: Confecção de imagens do jogo.</span><br/>
-                    <span><a target="_blank" href="https://www.instagram.com/Gabriel._moreira_.05/">Gabriel Moreira</a>: Revisão de erros ortográficos.</span><br/>
+                    <span><a target="_blank" href="https://www.instagram.com/Gabriel._moreira_.05/">Gabriel Moreira</a>: Programação do jogo, revisão de erros ortográficos.</span><br/>
                     <span><a target="_blank" href="https://www.instagram.com/_joaofrancisco.f/">João Francisco</a>: Revisão de erros ortográficos, criação de regras.</span><br/>
-                    <span><a target="_blank" >Ricardo Filho</a>: ???</span><br/>
+                    <span><a target="_blank" >Ricardo Filho</a>: Projeto Escrito. 📰</span><br/>
                 </div>
                 <div class="ConnectingScreen" style="display: none">
                     <h1 class="ConnectingText">Conectando ao servidor...</h1>
@@ -234,72 +233,94 @@
                             <input class="UserTextSubmit" type="submit" value="Pronto!" disabled>
                         </form>      
                     </div>
+                    <div class="QuestionInput" style="display: none">
+                        <p class="QuestionHeader">Pergunta</p>
+                        <span class="SideA">0</span>
+                        <span class="SideB">0</span>
+                        <span class="SideH">X</span>
+                        <img class="Triangle" src="/resources/RetangleTriangle.png"></img>
+                        <form class="QuestionFormInput">
+                            <input class="QuestionTextInput" required='required' type="text" placeholder="Hipotenusa" onInput="HipotenusaResulver()" onPropertychange="HipotenusaResulver()">
+                            <input class="QuestionTextSubmit" type="submit" value="Pronto!" disabled>
+                        </form>      
+                    </div>
                     <div class="PlayerInTheRoom">
                         <p class="PlayerInTheRoomHeader">Jogadores na sala:</p>
                         <div class="Players"></div>
                     </div>
+                    <div class="Dice" onclick="RunDice()" style="background-image: url('/resources/DiceIcon.png');">
+                        <div class="DiceNumber" style="display: none">7</div>
+                    </div>
                 </div>
-                <div class='board'>
-                    <div id="0" class="Start"></div>
-                    <div id="1" class="box"></div>
-                    <div id="2" class="box"></div>
-                    <div id="3" class="box"></div>
-                    <div id="4" class="box"></div>
-                    <div id="5" class="box"></div>
-                    <div id="6" class="box"></div>
-                    <div id="7" class="box"></div>
-                    <div id="8" class="box"></div>
-                    <div id="9" class="box"></div>
-                    <div id="10" class="Hole"></div>
-                    <div id="11" class="Hole"></div>
-                    <div id="12" class="Hole"></div>
-                    <div id="13" class="Hole"></div>
-                    <div id="14" class="Hole"></div>
-                    <div id="15" class="Hole"></div>
-                    <div id="16" class="Hole"></div>
-                    <div id="17" class="Hole"></div>
-                    <div id="18" class="Hole"></div>
-                    <div id="19" class="box"></div>
-                    <div id="20" class="box"></div>
-                    <div id="21" class="box"></div>
-                    <div id="22" class="box"></div>
-                    <div id="23" class="box"></div>
-                    <div id="24" class="box"></div>
-                    <div id="25" class="box"></div>
-                    <div id="26" class="box"></div>
-                    <div id="27" class="box"></div>
-                    <div id="28" class="box"></div>
-                    <div id="29" class="box"></div>
-                    <div id="30" class="box"></div>
-                    <div id="31" class="Hole"></div>
-                    <div id="32" class="Hole"></div>
-                    <div id="33" class="Hole"></div>
-                    <div id="34" class="Hole"></div>
-                    <div id="35" class="Hole"></div>
-                    <div id="36" class="Hole"></div>
-                    <div id="37" class="Hole"></div>
-                    <div id="38" class="Hole"></div>
-                    <div id="39" class="Hole"></div>
-                    <div id="40" class="box"></div>
-                    <div id="41" class="Hole"></div>
-                    <div id="42" class="box"></div>
-                    <div id="43" class="box"></div>
-                    <div id="44" class="box"></div>
-                    <div id="45" class="Hole"></div>
-                    <div id="46" class="box"></div>
-                    <div id="47" class="box"></div>
-                    <div id="48" class="box"></div>
-                    <div id="49" class="Hole"></div>
-                    <div id="50" class="box"></div>
-                    <div id="51" class="box"></div>
-                    <div id="52" class="box"></div>
-                    <div id="53" class="Hole"></div>
-                    <div id="54" class="box"></div>
-                    <div id="55" class="box"></div>
-                    <div id="56" class="box"></div>
-                    <div id="57" class="Hole"></div>
-                    <div id="58" class="box"></div>
-                    <div id="59" class="End"></div>
+                <div class='boardWrapper'>
+                    <div class="Characters">
+                        <div id="C0" class="Caracter1" style="background-image: url('/resources/PawnBlue.png');"></div>
+                        <div id="C1" class="Caracter2" style="display: none; background-image: url('/resources/PawnRed.png');"></div>
+                        <div id="C2" class="Caracter3" style="display: none; background-image: url('/resources/PawnOrange.png');"></div>
+                        <div id="C3" class="Caracter4" style="display: none; margin-right: 5vw;background-image: url('/resources/PawnPurple.png');"></div>
+                    </div>
+                    <div class='board'>
+                        <div id="0" class="Start"></div>
+                        <div id="1" class="box"></div>
+                        <div id="2" class="box"></div>
+                        <div id="3" class="box"></div>
+                        <div id="4" class="box"></div>
+                        <div id="5" class="box"></div>
+                        <div id="6" class="box"></div>
+                        <div id="7" class="box"></div>
+                        <div id="8" class="box"></div>
+                        <div id="9" class="box"></div>
+                        <div id="10" class="Hole"></div>
+                        <div id="11" class="Hole"></div>
+                        <div id="12" class="Hole"></div>
+                        <div id="13" class="Hole"></div>
+                        <div id="14" class="Hole"></div>
+                        <div id="15" class="Hole"></div>
+                        <div id="16" class="Hole"></div>
+                        <div id="17" class="Hole"></div>
+                        <div id="18" class="Hole"></div>
+                        <div id="19" class="box"></div>
+                        <div id="20" class="box"></div>
+                        <div id="21" class="box"></div>
+                        <div id="22" class="box"></div>
+                        <div id="23" class="box"></div>
+                        <div id="24" class="box"></div>
+                        <div id="25" class="box"></div>
+                        <div id="26" class="box"></div>
+                        <div id="27" class="box"></div>
+                        <div id="28" class="box"></div>
+                        <div id="29" class="box"></div>
+                        <div id="30" class="box"></div>
+                        <div id="31" class="Hole"></div>
+                        <div id="32" class="Hole"></div>
+                        <div id="33" class="Hole"></div>
+                        <div id="34" class="Hole"></div>
+                        <div id="35" class="Hole"></div>
+                        <div id="36" class="Hole"></div>
+                        <div id="37" class="Hole"></div>
+                        <div id="38" class="Hole"></div>
+                        <div id="39" class="Hole"></div>
+                        <div id="40" class="box"></div>
+                        <div id="41" class="Hole"></div>
+                        <div id="42" class="box"></div>
+                        <div id="43" class="box"></div>
+                        <div id="44" class="box"></div>
+                        <div id="45" class="Hole"></div>
+                        <div id="46" class="box"></div>
+                        <div id="47" class="box"></div>
+                        <div id="48" class="box"></div>
+                        <div id="49" class="Hole"></div>
+                        <div id="50" class="box"></div>
+                        <div id="51" class="box"></div>
+                        <div id="52" class="box"></div>
+                        <div id="53" class="Hole"></div>
+                        <div id="54" class="box"></div>
+                        <div id="55" class="box"></div>
+                        <div id="56" class="box"></div>
+                        <div id="57" class="Hole"></div>
+                        <div id="58" class="box"></div>
+                        <div id="59" class="End"></div>
+                    </div>
                 </div>
             </div>
         </div>

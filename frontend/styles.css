@@ -813,19 +813,23 @@ body {
     background-clip: unset;
 }
 
-.Game .board {
-    z-index: -3;
+.boardWrapper {
+    z-index: -4;
     position: absolute;
     bottom: 5vh;
-    display: grid;
     left: 15vw;
-    grid-template-columns: 7vw 7vw 7vw 7vw 7vw 7vw 7vw 7vw 7vw 7vw;
-    grid-template-rows: 7vw 7vw 7vw 7vw 7vw 7vw;
-    justify-content: center;
     background-color: #1113;
     box-shadow: 0px 0px 10px #111;
     border-radius: 25px;
     overflow: hidden;
+}
+
+.Game .board {
+    z-index: -3;
+    display: grid;
+    grid-template-columns: 7vw 7vw 7vw 7vw 7vw 7vw 7vw 7vw 7vw 7vw;
+    grid-template-rows: 7vw 7vw 7vw 7vw 7vw 7vw;
+    justify-content: center;
 }
 
 .Game {
@@ -873,4 +877,187 @@ body {
     border: 0.1vw solid #530074;
     overflow: hidden;
     background-clip: unset;
+}
+
+.Dice {
+    height: 7vw;
+    width: 7vw;
+    position: absolute;
+    bottom: 25vh;
+    left: 2vw;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.DiceNumber {
+    height: 7vw;
+    width: 7vw;
+    margin-top: 0.5vw;
+    margin-left: 2.1vw;
+    color:#FFF;
+    font-size: 5vw;
+    color: black;
+    -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+}
+
+.Characters {
+    position: absolute;
+    height: 42vw;
+    width: 60vw;
+}
+
+.Caracter1 {
+    position: absolute;
+    z-index: 1;
+    width: 3vw;
+    height: 3vw;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.Caracter2 {
+    margin-left: 3.5vw;
+    position: absolute;
+    z-index: 1;
+    width: 3vw;
+    height: 3vw;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.Caracter3 {
+    margin-top: 3.5vw;
+    position: absolute;
+    z-index: 1;
+    width: 3vw;
+    height: 3vw;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.Caracter4 {
+    margin-top: 3.5vw;
+    margin-left: 3.5vw;
+    position: absolute;
+    z-index: 1;
+    width: 3vw;
+    height: 3vw;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.QuestionInput {
+    position: absolute;
+    width: 50vw;
+    height: 50vh;
+    margin-left: 25vw;
+    margin-top: 25vh;
+    border: 5px solid #530074;
+    background-color: #FFF;
+    border-radius: 25px;
+    box-shadow: 0px 0px 15px #111;
+}
+
+.QuestionHeader {
+    position: absolute;
+    background-color: #530074;
+    width: 50vw;
+    margin-top: 0;
+    height: 3vw;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    color: #FFFFFF;
+    font-size: 2.5vw;
+    text-align: center;
+}
+
+.QuestionTextSubmit {
+    position: absolute;
+    width: 7vw;
+    height: 3vw;
+    border-radius: 250px;
+    bottom: 10vh;
+    background-color: #FFF;
+    -webkit-appearance:     none;
+    -moz-appearance:        none;
+    -ms-appearance:         none;
+    -o-appearance:          none;
+    appearance:             none;
+    outline: none;
+    color: #530074;
+    font-size: 1.5vw;
+    border: 2px solid #530074;
+    box-shadow: 0px 0px 0px #530074;
+    animation: PlayButtonAnimReverse 0.3s ease-out;
+    cursor: pointer;
+    right: 1vw;
+    bottom: 1vw;
+}
+
+.QuestionTextSubmit:hover {
+    animation: PlayButtonAnim 0.3s ease-out;
+    box-shadow: 5px -5px 0px #530074;
+}
+
+.QuestionTextSubmit:disabled {
+    border: 2px solid #222;
+    background-color: #CCC;
+    box-shadow: 0px 0px 0px #222;
+    -webkit-animation: none !important;
+    -moz-animation: none !important;
+    -o-animation: none !important;
+    -ms-animation: none !important;
+    animation: none !important;
+    cursor: not-allowed;
+    color: #222;
+}
+
+.QuestionTextInput {
+    width: 45vw;
+    margin-left: 2.5vw;
+    height: 10vh;
+    border-radius: 25px;
+    border: 2px solid #530074;
+    text-align: center;
+    color: #530074;
+    font-size: 3vw;
+    -webkit-appearance:     none;
+    -moz-appearance:        none;
+    -ms-appearance:         none;
+    -o-appearance:          none;
+    appearance:             none;
+    outline: none;
+}
+
+.Triangle {
+    margin-top: 1vw;
+    width: 20vw;
+    height: 20vw;
+    margin-left: 15vw;
+}
+
+.SideA {
+    position: absolute;
+    margin-top: 8vw;
+    width: 5vw;
+    height: 5vw;
+    margin-left: 12vw;
+    font-size: 3vw;
+    align: right;
+}
+.SideB {
+    position: absolute;
+    margin-top: 17vw;
+    width: 10vw;
+    height: 5vw;
+    margin-left: 19vw;
+    font-size: 3vw;
+    text-align: center;
+}
+.SideH {
+    position: absolute;
+    margin-top: 8vw;
+    width: 5vw;
+    height: 5vw;
+    margin-left: 28vw;
+    font-size: 3vw;
 }

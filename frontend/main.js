@@ -2,6 +2,13 @@ var MouseSelectedText = false;
 var MouseSelectedBox = false;
 var loaded = false;
 
+const Board1 = [1,2,3,4,5,6,7,8,9,10];
+const Board2 = [0,0,0,0,0,0,0,0,0,11];
+const Board3 = [21,20,19,18,17,16,15,14,13,12];
+const Board4 = [22,0,0,0,0,0,0,0,0,0];
+const Board5 = [23,0,27,28,29,0,33,34,35,0];
+const Board6 = [24,25,26,0,30,31,32,0,36,37];
+
 function BoxWrapper(Name) {
     if (!MouseSelectedText && !MouseSelectedBox) {
         setTimeout(()=>{
@@ -52,6 +59,7 @@ function Loaded() {
     socket.on('NewUser', (Data)=>{
         Data = JSON.parse(Data);
         CreateUsers(Data.EnteredUserId);
+        AddUserPawn();
     })
     socket.on('UserNameInformation', (Data)=>{
         Data = JSON.parse(Data);
@@ -69,6 +77,7 @@ function Loaded() {
     socket.on('UserLeave', (Data) => {
         Data = JSON.parse(Data);
         document.getElementById(Data.UserLeaved).remove();
+        AddUserPawn();
     })
     socket.on('FullRoom', () => {
         document.getElementsByClassName("MenuBackground")[0].style.display = 'block';
@@ -91,6 +100,7 @@ function Loaded() {
         document.getElementsByClassName("RoomNotFounded")[0].style.display = 'block';
     })
     document.getElementsByClassName('RoomForm')[0].addEventListener('submit', PlayRoomIdBlockAndExecute)
+    document.getElementsByClassName('QuestionFormInput')[0].addEventListener('submit', ResponseQ);
     socket.on('reconnect', ()=>{
        newUserId = getRandomString(12);
         oldUserId = UserId
@@ -116,6 +126,57 @@ function Loaded() {
 
     socket.on('ConnectionFailed', () => {
         document.getElementsByClassName('ErrorScreen')[0].style.display = 'block';
+    })
+
+    socket.on('DiceRolled', (Data) => {
+        Data = JSON.parse(Data);
+        if (Data.UserId === UserId) {
+            document.getElementsByClassName('DiceNumber')[0].style.display = 'block';
+            document.getElementsByClassName('DiceNumber')[0].innerHTML = Data.DiceResult.toString();
+        }
+        let UserIndex = 0;
+        Playrs = [...document.getElementsByClassName('Players')[0].children];
+        Playrs.forEach((element, index) => {
+            if (element.id === Data.UserId) {
+                UserIndex = index;
+            }
+        })
+        Data.UserPosition += Data.DiceResult;
+        Data.UserPosition += 1;
+        var Collumn = 0;
+        var Row = 0;
+        if (Board1.indexOf(Data.UserPosition) > -1) {
+            Collumn = 1;
+            Row = Board1.indexOf(Data.UserPosition);
+        }
+        if (Board2.indexOf(Data.UserPosition) > -1) {
+            Collumn = 2;
+            Row = Board2.indexOf(Data.UserPosition);
+        }
+        if (Board3.indexOf(Data.UserPosition) > -1) {
+            Collumn = 3;
+            Row = Board3.indexOf(Data.UserPosition);
+        }
+        if (Board4.indexOf(Data.UserPosition) > -1) {
+            Collumn = 4;
+            Row = Board4.indexOf(Data.UserPosition);
+        }
+        if (Board5.indexOf(Data.UserPosition) > -1) {
+            Collumn = 5;
+            Row = Board5.indexOf(Data.UserPosition);
+        }
+        if (Board6.indexOf(Data.UserPosition) > -1) {
+            Collumn = 6;
+            Row = Board6.indexOf(Data.UserPosition);
+        }
+        document.getElementById('C'+UserIndex.toString()).style.top = (Math.floor(Collumn-1)*7)+'vw';
+        document.getElementById('C'+UserIndex.toString()).style.left = (Math.floor(Row)*7)+'vw';
+    })
+    socket.on('QuestionToAnswer', (Data) => {
+        Data = JSON.parse(Data);
+        document.getElementsByClassName('QuestionInput')[0].style.display = 'block';
+        document.getElementsByClassName('SideA')[0].innerHTML = Data.SideA;
+        document.getElementsByClassName('SideB')[0].innerHTML = Data.SideB;
     })
 }
 
@@ -241,4 +302,51 @@ function CreateUsers(id) {
 function PlayRoomIdBlockAndExecute(event) {
     event.preventDefault();
     StartGame();
+}
+
+function RunDice() {
+    socket.emit('RunDice', JSON.stringify({RoomId: CurrentRoom, UserId: UserId}));
+}
+
+function AddUserPawn() {
+    Players = [];
+    Players = [...document.getElementsByClassName('Players')[0].children]
+    Players.length-1;
+    if (Players.length === 2) {
+        document.getElementById('C0').style.display = 'block';
+        document.getElementById('C1').style.display = 'block';
+        document.getElementById('C2').style.display = 'none';
+        document.getElementById('C3').style.display = 'none';
+    } else if (Players.length === 3) {
+        document.getElementById('C0').style.display = 'block';
+        document.getElementById('C1').style.display = 'block';
+        document.getElementById('C2').style.display = 'block';
+        document.getElementById('C3').style.display = 'none';
+    } else if (Players.length === 4) {
+        document.getElementById('C0').style.display = 'block';
+        document.getElementById('C1').style.display = 'block';
+        document.getElementById('C2').style.display = 'block';
+        document.getElementById('C3').style.display = 'block';
+    } else {
+        document.getElementById('C0').style.display = 'block';
+        document.getElementById('C1').style.display = 'none';
+        document.getElementById('C2').style.display = 'none';
+        document.getElementById('C3').style.display = 'none';
+    }
+}
+
+function HipotenusaResulver() {
+    if (document.getElementsByClassName('QuestionTextInput')[0].value.length > 0 && !isNaN(document.getElementsByClassName('QuestionTextInput')[0].value)) {
+        document.getElementsByClassName('QuestionTextSubmit')[0].disabled = false;
+    } else {
+        document.getElementsByClassName('QuestionTextSubmit')[0].disabled = true;
+    }
+}
+
+function ResponseQ(event) {
+    event.preventDefault();
+    if (!document.getElementsByClassName('QuestionTextSubmit')[0].disabled) {
+        document.getElementsByClassName('QuestionInput').style.display = 'none';
+        socket.emit('QuestionResponse', JSON.stringify({RoomId: CurrentRoom, UserId: UserId, Answer: document.getElementsByClassName('QuestionTextInput')[0].value, SideA:0 }))
+    }
 }

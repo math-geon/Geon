@@ -1,4 +1,5 @@
 const RoomMaxPersons = 4;
+const UsableHomes = 35;
 
 ActiveRooms = []
 ids = [];
@@ -48,6 +49,7 @@ function GenerateRoom(socket, Data) {
     RoomScheme = {
         Id: '',
         Players : [],
+        Turn: 0,
     }
     
     PlayerScheme = {
@@ -139,6 +141,7 @@ function LogUserIn(socket, Data) {
             Id: "",
             socket,
             Name: "",
+            Position: 0,
         }
         PlayerScheme.Id = Data.UserId;
         PlayerScheme.socket = socket;
@@ -167,6 +170,56 @@ function RegisterUserName(socket, Data) {
     })
 }
 
+function RunDice(socket, Data) {
+    itsUserTurn = false;
+    var RoomIndex;
+    var UserIndex;
+    ActiveRooms.forEach((element, RI) => {
+        if (element.Id === Data.RoomId) {
+            element.Players.forEach((player, index) => {
+                if (player.Id === Data.UserId) {
+                    if (index === element.Turn) {
+                        itsUserTurn = true;
+                        RoomIndex = RI;
+                        UserIndex = index; 
+                    }
+                }
+            })
+        }
+    })
+    if (itsUserTurn) {
+        DiceResult = Math.floor(Math.random() * ((6 - 1) + 1) + 1);
+        ActiveRooms[RoomIndex].Players.forEach((element) => {
+            element.socket.emit('DiceRolled', JSON.stringify({RoomId: Data.RoomId, UserId: Data.UserId, DiceResult: DiceResult, UserPosition: ActiveRooms[RoomIndex].Players[UserIndex].Position}))
+        })
+        GenerateQuestion(socket, Data);
+    }
+}
+
+function GenerateQuestion(socket, Data) {
+    var HSideA;
+    var HSideB;
+    var HSideH;
+
+    function Square(Number) {
+        return Number*Number;
+    }
+
+    function GenerateHypertenuse() {
+        SideA = Math.floor(Math.random() * ((100 - 2) + 2) + 1);
+        SideB = Math.floor(Math.random() * ((100 - 2) + 2) + 1);
+        if (Math.sqrt(Square(SideA)+Square(SideB)) === Math.floor(Math.sqrt(Square(SideA)+Square(SideB)))) {
+            HSideA = SideA;
+            HSideB = SideB;
+            HSideH = Math.sqrt(Square(SideA)+Square(SideB));
+        } else {
+            GenerateHypertenuse();
+        }
+    }
+    GenerateHypertenuse();
+    socket.emit('QuestionToAnswer', JSON.stringify({RoomId: Data.RoomId, UserId: Data.UserId, SideA:HSideA, SideB:HSideB}))
+}
+
 module.exports = (io) => {
     io.on('connection', (socket) => {
         socket.on('GenerateRoom', (Data) => {GenerateRoom(socket, Data)});
@@ -174,5 +227,6 @@ module.exports = (io) => {
         socket.on('Reconnector', (Data) => {Updater(socket, Data)});
         socket.on('RegisterUser', (Data) => {verifyer(socket, LogUserIn, Data, false)})
         socket.on('RegisterUserName', (Data) => {verifyer(socket, RegisterUserName, Data)})
+        socket.on('RunDice', (Data) => {verifyer(socket, RunDice, Data)})
     });
 };
