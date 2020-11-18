@@ -635,6 +635,7 @@ body {
     min-height: 10vw;
     height: auto;
     flex-direction: column;
+    -webkit-text-stroke-width: 1px;
 }
 
 .PlayerWrapper {
@@ -915,6 +916,9 @@ body {
     height: 3vw;
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    transition-timing-function: ease;
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    transition: 0.25s;
 }
 .Caracter2 {
     margin-left: 3.5vw;
@@ -924,6 +928,9 @@ body {
     height: 3vw;
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    transition-timing-function: ease;
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    transition: 0.25s;
 }
 .Caracter3 {
     margin-top: 3.5vw;
@@ -933,6 +940,9 @@ body {
     height: 3vw;
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    transition-timing-function: ease;
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    transition: 0.25s;
 }
 .Caracter4 {
     margin-top: 3.5vw;
@@ -943,14 +953,17 @@ body {
     height: 3vw;
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    transition-timing-function: ease;
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    transition: 0.25s;
 }
 
 .QuestionInput {
     position: absolute;
     width: 50vw;
-    height: 50vh;
+    height: 36vw;
     margin-left: 25vw;
-    margin-top: 25vh;
+    margin-top: 7vw;
     border: 5px solid #530074;
     background-color: #FFF;
     border-radius: 25px;
@@ -1060,4 +1073,161 @@ body {
     height: 5vw;
     margin-left: 28vw;
     font-size: 3vw;
+}
+
+.Winning {
+    position: absolute;
+    z-index: 1000000;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    background-color: #8AFF55DE;
+}
+
+.Winning .WinBox {
+    position: absolute;
+    left: 25vw;
+    top: 25vh;
+    width: 50vw;
+    height: 50vh;
+    background-color: #FFF;
+    border-radius: 25px;
+}
+
+.Winning .WinBox .WinTextTitle {
+    position: absolute;
+    width: 50vw;
+    background-color: #FFAA00;
+    height: 10vh;
+    margin-top: -5vh;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    color: #FFF;
+    text-align: center;
+    font-size: 4vw;
+}
+
+.Winning .WinBox .WinTextDescription {
+    position: absolute;
+    font-size: 3vw;
+    margin-top: 10vh;
+    text-align: center;
+}
+
+.Winning .WinBox .WinEffect {
+    position: absolute;
+    background-color: #530074;
+    width: 50vw;
+    height: 4vh;
+    top: 46.5vh;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    z-index: 777777777;
+}
+
+.Winning .WinBox .CloseWin {
+    position: absolute;
+    width: 7vw;
+    height: 3vw;
+    border-radius: 250px;
+    bottom: 10vh;
+    background-color: #FFF;
+    -webkit-appearance:     none;
+    -moz-appearance:        none;
+    -ms-appearance:         none;
+    -o-appearance:          none;
+    appearance:             none;
+    outline: none;
+    color: #530074;
+    font-size: 1.5vw;
+    border: 2px solid #530074;
+    box-shadow: 0px 0px 0px #530074;
+    animation: PlayButtonAnimReverse 0.3s ease-out;
+    cursor: pointer;
+    right: 1vw;
+    bottom: 2.5vw;
+}
+
+.Winning .WinBox .CloseWin:hover {
+    animation: PlayButtonAnim 0.3s ease-out;
+    box-shadow: 5px -5px 0px #530074;
+}
+.Losing {
+    position: absolute;
+    z-index: 1000000;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    background-color: #FF5555DD;
+}
+
+.Losing .LoseBox {
+    position: absolute;
+    left: 25vw;
+    top: 25vh;
+    width: 50vw;
+    height: 50vh;
+    background-color: #FFF;
+    border-radius: 25px;
+}
+
+.Losing .LoseBox .LoseTextTitle {
+    position: absolute;
+    width: 50vw;
+    background-color: #FFAA00;
+    height: 10vh;
+    margin-top: -5vh;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    color: #FFF;
+    text-align: center;
+    font-size: 4vw;
+}
+
+.Losing .LoseBox .LoseTextDescription {
+    position: absolute;
+    font-size: 3vw;
+    margin-top: 10vh;
+    text-align: center;
+}
+
+.Losing .LoseBox .LoseEffect {
+    position: absolute;
+    background-color: #530074;
+    width: 50vw;
+    height: 4vh;
+    top: 46.5vh;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    z-index: 777777777;
+}
+
+.Losing .LoseBox .CloseLose {
+    position: absolute;
+    width: 7vw;
+    height: 3vw;
+    border-radius: 250px;
+    bottom: 10vh;
+    background-color: #FFF;
+    -webkit-appearance:     none;
+    -moz-appearance:        none;
+    -ms-appearance:         none;
+    -o-appearance:          none;
+    appearance:             none;
+    outline: none;
+    color: #530074;
+    font-size: 1.5vw;
+    border: 2px solid #530074;
+    box-shadow: 0px 0px 0px #530074;
+    animation: PlayButtonAnimReverse 0.3s ease-out;
+    cursor: pointer;
+    right: 1vw;
+    bottom: 2.5vw;
+}
+
+.Losing .LoseBox .CloseLose:hover {
+    animation: PlayButtonAnim 0.3s ease-out;
+    box-shadow: 5px -5px 0px #530074;
 }

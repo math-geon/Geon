@@ -1,34 +1,29 @@
 const RoomMaxPersons = 4;
-const UsableHomes = 35;
+const UsableHomes = 37;
 
 ActiveRooms = []
 ids = [];
-cleaning = false;
 
 function cleaner() {
-    if (!cleaning) {
-        cleaning = true;
-        setTimeout(()=> {
-            if (ids.length < 1) {return};
-            ActiveRooms.forEach((element, index) => {
-                element.Players.forEach((element2, index2) => {
-                    if (!ids.includes(element2.Id)) {
-                        ActiveRooms[index].Players.splice(index2,1);
-                        ActiveRooms[index].Players.forEach((element3) => {
-                            element3.socket.emit('UserLeave', JSON.stringify({RoomId: element.Id, UserLeaved: element2.Id}))
-                        })
-                    }
-                })
-            })
-            ActiveRooms.forEach((element, index) => {
-                if (element.Players.length === 0) {
-                    ActiveRooms.splice(index,1);
+    setTimeout(() => {
+        if (ids.length < 1) {return};
+        ActiveRooms.forEach((element, index) => {
+            element.Players.forEach((element2, index2) => {
+                if (!ids.includes(element2.Id)) {
+                    ActiveRooms[index].Players.splice(index2,1);
+                    ActiveRooms[index].Players.forEach((element3) => {
+                        element3.socket.emit('UserLeave', JSON.stringify({RoomId: element.Id, UserLeaved: element2.Id}))
+                    })
                 }
             })
-            ids = [];
-            cleaning = false;
-        }, 15000);
-    }
+        })
+        ActiveRooms.forEach((element, index) => {
+            if (element.Players.length === 0) {
+                ActiveRooms.splice(index,1);
+            }
+        })
+        ids = [];
+    }, 5000);
 }
 
 function getRandomString(length) {
@@ -142,6 +137,11 @@ function LogUserIn(socket, Data) {
             socket,
             Name: "",
             Position: 0,
+            NextPosition: 0,
+            QSideA: 0,
+            QSideB: 0,
+            QSideH: 0,
+            QSheld: false,
         }
         PlayerScheme.Id = Data.UserId;
         PlayerScheme.socket = socket;
@@ -187,10 +187,11 @@ function RunDice(socket, Data) {
             })
         }
     })
-    if (itsUserTurn) {
+    if (itsUserTurn && !ActiveRooms[RoomIndex].Players[UserIndex].QSheld) {
         DiceResult = Math.floor(Math.random() * ((6 - 1) + 1) + 1);
+        ActiveRooms[RoomIndex].Players[UserIndex].NextPosition = ActiveRooms[RoomIndex].Players[UserIndex].Position + DiceResult; 
         ActiveRooms[RoomIndex].Players.forEach((element) => {
-            element.socket.emit('DiceRolled', JSON.stringify({RoomId: Data.RoomId, UserId: Data.UserId, DiceResult: DiceResult, UserPosition: ActiveRooms[RoomIndex].Players[UserIndex].Position}))
+            element.socket.emit('DiceRolled', JSON.stringify({RoomId: Data.RoomId, UserId: Data.UserId, DiceResult: DiceResult, UserPosition: ActiveRooms[RoomIndex].Players[UserIndex].NextPosition}))
         })
         GenerateQuestion(socket, Data);
     }
@@ -217,7 +218,78 @@ function GenerateQuestion(socket, Data) {
         }
     }
     GenerateHypertenuse();
+    var GRoomIndex;
+    var GUserIndex;
+    ActiveRooms.forEach((element, RI) => {
+        if (element.Id === Data.RoomId) {
+            element.Players.forEach((player, index) => {
+                if (player.Id === Data.UserId) {
+                    GRoomIndex = RI;
+                    GUserIndex = index; 
+                }
+            })
+        }
+    })
+    ActiveRooms[GRoomIndex].Players[GUserIndex].QSideA = HSideA;
+    ActiveRooms[GRoomIndex].Players[GUserIndex].QSideB = HSideB;
+    ActiveRooms[GRoomIndex].Players[GUserIndex].QSideH = HSideH;
     socket.emit('QuestionToAnswer', JSON.stringify({RoomId: Data.RoomId, UserId: Data.UserId, SideA:HSideA, SideB:HSideB}))
+    ActiveRooms[GRoomIndex].Players[GUserIndex].QSheld = true;
+}
+
+function QR(socket, Data) {
+    itsUserTurn = false;
+    var RoomIndex;
+    var UserIndex;
+    ActiveRooms.forEach((element, RI) => {
+        if (element.Id === Data.RoomId) {
+            element.Players.forEach((player, index) => {
+                if (player.Id === Data.UserId) {
+                    if (index === element.Turn) {
+                        itsUserTurn = true;
+                        RoomIndex = RI;
+                        UserIndex = index; 
+                    }
+                }
+            })
+        }
+    })
+    if (itsUserTurn) {
+        if (!isNaN(Number(Data.Answer)) && Number(Data.Answer) === ActiveRooms[RoomIndex].Players[UserIndex].QSideH) {
+            //The User Answer Correct
+            ActiveRooms[RoomIndex].Players[UserIndex].Position = ActiveRooms[RoomIndex].Players[UserIndex].NextPosition;
+            ActiveRooms[RoomIndex].Players.forEach((element) => {
+                element.socket.emit('DiceRolled', JSON.stringify({RoomId: Data.RoomId, UserId: Data.UserId, DiceResult: '', UserPosition: ActiveRooms[RoomIndex].Players[UserIndex].NextPosition}))
+            })
+            ActiveRooms[RoomIndex].Turn += 1;
+            if (ActiveRooms[RoomIndex].Turn > ActiveRooms[RoomIndex].Players.length-1) {
+                ActiveRooms[RoomIndex].Turn = 0;
+            }
+        } else {
+            //He failed
+            ActiveRooms[RoomIndex].Players[UserIndex].NextPosition = ActiveRooms[RoomIndex].Players[UserIndex].Position;
+            ActiveRooms[RoomIndex].Players.forEach((element) => {
+                element.socket.emit('DiceRolled', JSON.stringify({RoomId: Data.RoomId, UserId: Data.UserId, DiceResult: '', UserPosition: ActiveRooms[RoomIndex].Players[UserIndex].Position}))
+            })
+            ActiveRooms[RoomIndex].Turn += 1;
+            if (ActiveRooms[RoomIndex].Turn > ActiveRooms[RoomIndex].Players.length-1) {
+                ActiveRooms[RoomIndex].Turn = 0;
+            }
+        }
+        if (ActiveRooms[RoomIndex].Players[UserIndex].Position >= UsableHomes) {
+            ActiveRooms[RoomIndex].Players.forEach((element) => {
+                if (element.Id === Data.UserId) {
+                    element.socket.emit('Win');
+                } else {
+                    element.socket.emit('Lose');
+                }
+            })    
+        }
+        ActiveRooms[RoomIndex].Players[UserIndex].QSheld = false;
+        ActiveRooms[RoomIndex].Players.forEach((element) => {
+            element.socket.emit('Turn', JSON.stringify({RoomId: Data.RoomId, Turn: ActiveRooms[RoomIndex].Turn}));
+        })
+    }
 }
 
 module.exports = (io) => {
@@ -228,5 +300,6 @@ module.exports = (io) => {
         socket.on('RegisterUser', (Data) => {verifyer(socket, LogUserIn, Data, false)})
         socket.on('RegisterUserName', (Data) => {verifyer(socket, RegisterUserName, Data)})
         socket.on('RunDice', (Data) => {verifyer(socket, RunDice, Data)})
+        socket.on('QuestionResponse', (Data) => {verifyer(socket, QR, Data)})
     });
 };

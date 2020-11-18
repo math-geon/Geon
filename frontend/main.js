@@ -51,16 +51,24 @@ function copyToClipboard(text) {
 }
 
 var CurrentRoom = '';
-var UserId = getRandomString(12);
 var UserName = '';
+var UserId = getRandomString(12);
 
 function Loaded() {
     loaded = true;
+    socket.on('Win', () => {
+        document.getElementsByClassName('Winning')[0].style.display = 'block';
+    })
+    socket.on('Lose', () => {
+        document.getElementsByClassName('Losing')[0].style.display = 'block';
+    })
     socket.on('NewUser', (Data)=>{
         Data = JSON.parse(Data);
         CreateUsers(Data.EnteredUserId);
         AddUserPawn();
-    })
+        Playrs = [...document.getElementsByClassName('Players')[0].children];
+        Playrs[0].style.webkitTextStroke = '1px #FFAA00';
+    });
     socket.on('UserNameInformation', (Data)=>{
         Data = JSON.parse(Data);
         Players = [];
@@ -88,6 +96,12 @@ function Loaded() {
         document.getElementsByClassName("UserNameInput")[0].id = '';
         document.getElementsByClassName("UserNameInput")[0].style.display = 'none';
         document.getElementsByClassName('RoomFulled')[0].style.display = 'block';
+        CurrentRoom = '';
+        UserName = '';
+        Playrs = [...document.getElementsByClassName('Players')[0].children];
+        Playrs.forEach((element, index) => {
+            element.remove();
+        })
     })
     socket.on('RoomNotExists', () => {
         document.getElementsByClassName("MenuBackground")[0].style.display = 'block';
@@ -98,6 +112,20 @@ function Loaded() {
         document.getElementsByClassName("UserNameInput")[0].id = '';
         document.getElementsByClassName("UserNameInput")[0].style.display = 'none';
         document.getElementsByClassName("RoomNotFounded")[0].style.display = 'block';
+        CurrentRoom = '';
+        UserName = '';
+        Playrs = [...document.getElementsByClassName('Players')[0].children];
+        Playrs.forEach((element, index) => {
+            element.remove();
+        })
+        document.getElementById('C0').style.top = 0+'vw';
+        document.getElementById('C0').style.left = 0+'vw';
+        document.getElementById('C1').style.top = 0+'vw';
+        document.getElementById('C1').style.left = 0+'vw';
+        document.getElementById('C2').style.top = 0+'vw';
+        document.getElementById('C2').style.left = 0+'vw';
+        document.getElementById('C3').style.top = 0+'vw';
+        document.getElementById('C3').style.left = 0+'vw';
     })
     document.getElementsByClassName('RoomForm')[0].addEventListener('submit', PlayRoomIdBlockAndExecute)
     document.getElementsByClassName('QuestionFormInput')[0].addEventListener('submit', ResponseQ);
@@ -126,6 +154,8 @@ function Loaded() {
 
     socket.on('ConnectionFailed', () => {
         document.getElementsByClassName('ErrorScreen')[0].style.display = 'block';
+        CurrentRoom = '';
+        UserName = '';
     })
 
     socket.on('DiceRolled', (Data) => {
@@ -141,7 +171,6 @@ function Loaded() {
                 UserIndex = index;
             }
         })
-        Data.UserPosition += Data.DiceResult;
         Data.UserPosition += 1;
         var Collumn = 0;
         var Row = 0;
@@ -169,11 +198,19 @@ function Loaded() {
             Collumn = 6;
             Row = Board6.indexOf(Data.UserPosition);
         }
+        if (Collumn < 0) {
+            Collumn = 0;
+        }
+        if (Row < 0) {
+            Row = 0;
+        }
         document.getElementById('C'+UserIndex.toString()).style.top = (Math.floor(Collumn-1)*7)+'vw';
         document.getElementById('C'+UserIndex.toString()).style.left = (Math.floor(Row)*7)+'vw';
     })
     socket.on('QuestionToAnswer', (Data) => {
         Data = JSON.parse(Data);
+        document.getElementsByClassName("QuestionInput")[0].id = 'popup';
+        setTimeout(()=>{document.getElementsByClassName("QuestionInput")[0].id = '';}, 300)
         document.getElementsByClassName('QuestionInput')[0].style.display = 'block';
         document.getElementsByClassName('SideA')[0].innerHTML = Data.SideA;
         document.getElementsByClassName('SideB')[0].innerHTML = Data.SideB;
@@ -277,6 +314,17 @@ function UserNameSubmit(event) {
 }
 
 function StartTheGame(RoomID) {
+    socket.on('Turn', (Data)=> {
+        Data= JSON.parse(Data);
+        Playrs = [...document.getElementsByClassName('Players')[0].children];
+        Playrs.forEach((element, index) => {
+            if (index === Data.Turn) {
+                element.style.webkitTextStroke = '1px #FFAA00';
+            } else {
+                element.style.webkitTextStroke = '0px #0000';
+            }
+        })
+    })
     function WaitLoad() {
         if (loaded === false) {
             setTimeout(()=>{WaitLoad()}, 2500)
@@ -346,7 +394,63 @@ function HipotenusaResulver() {
 function ResponseQ(event) {
     event.preventDefault();
     if (!document.getElementsByClassName('QuestionTextSubmit')[0].disabled) {
-        document.getElementsByClassName('QuestionInput').style.display = 'none';
-        socket.emit('QuestionResponse', JSON.stringify({RoomId: CurrentRoom, UserId: UserId, Answer: document.getElementsByClassName('QuestionTextInput')[0].value, SideA:0 }))
+        document.getElementsByClassName('QuestionInput')[0].id = 'popup-close';
+        setTimeout(()=>{
+            document.getElementsByClassName('QuestionInput')[0].id = '';
+            document.getElementsByClassName('QuestionInput')[0].style.display = 'none';
+        }, 300)
+        socket.emit('QuestionResponse', JSON.stringify({RoomId: CurrentRoom, UserId: UserId, Answer: document.getElementsByClassName('QuestionTextInput')[0].value}))
     }
+}
+
+function Win() {
+    document.getElementsByClassName('Winning')[0].style.display = 'none';
+    document.getElementsByClassName("MenuBackground")[0].style.display = 'block';
+    document.getElementsByClassName("ConnectingScreen")[0].style.display = 'none';
+    document.getElementsByClassName("ProgressProgressBar")[0].style.width = '0vw';
+    document.getElementsByClassName("Menus")[0].style.display = 'block';
+    document.getElementsByClassName("Game")[0].style.display = 'none';
+    document.getElementsByClassName("UserNameInput")[0].id = '';
+    document.getElementsByClassName("UserNameInput")[0].style.display = 'none';
+    document.getElementsByClassName('RoomFulled')[0].style.display = 'none';
+    CurrentRoom = '';
+        UserName = '';
+        Playrs = [...document.getElementsByClassName('Players')[0].children];
+        Playrs.forEach((element, index) => {
+            element.remove();
+        })
+        document.getElementById('C0').style.top = 0+'vw';
+        document.getElementById('C0').style.left = 0+'vw';
+        document.getElementById('C1').style.top = 0+'vw';
+        document.getElementById('C1').style.left = 0+'vw';
+        document.getElementById('C2').style.top = 0+'vw';
+        document.getElementById('C2').style.left = 0+'vw';
+        document.getElementById('C3').style.top = 0+'vw';
+        document.getElementById('C3').style.left = 0+'vw';
+}
+
+function Lose() {
+    document.getElementsByClassName('Losing')[0].style.display = 'none';
+    document.getElementsByClassName("MenuBackground")[0].style.display = 'block';
+    document.getElementsByClassName("ConnectingScreen")[0].style.display = 'none';
+    document.getElementsByClassName("ProgressProgressBar")[0].style.width = '0vw';
+    document.getElementsByClassName("Menus")[0].style.display = 'block';
+    document.getElementsByClassName("Game")[0].style.display = 'none';
+    document.getElementsByClassName("UserNameInput")[0].id = '';
+    document.getElementsByClassName("UserNameInput")[0].style.display = 'none';
+    document.getElementsByClassName('RoomFulled')[0].style.display = 'none';
+    CurrentRoom = '';
+        UserName = '';
+        Playrs = [...document.getElementsByClassName('Players')[0].children];
+        Playrs.forEach((element, index) => {
+            element.remove();
+        })
+        document.getElementById('C0').style.top = 0+'vw';
+        document.getElementById('C0').style.left = 0+'vw';
+        document.getElementById('C1').style.top = 0+'vw';
+        document.getElementById('C1').style.left = 0+'vw';
+        document.getElementById('C2').style.top = 0+'vw';
+        document.getElementById('C2').style.left = 0+'vw';
+        document.getElementById('C3').style.top = 0+'vw';
+        document.getElementById('C3').style.left = 0+'vw';
 }
