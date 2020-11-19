@@ -3,13 +3,13 @@
 <html>
     <header>
         <meta charset='utf-8'>
-        <link rel="stylesheet" type="text/css" href="styles.css">
+        <link rel="stylesheet" type="text/css" href="/staGeon/styles.css">
         <title>Geon: O jogo de tabuleiro sobre geometria</Title>
-        <link href="resources/logoSmall.png" rel="shortcut icon" type="image/png" />
+        <link href="/staGeon/resources/LogoSmall.png" rel="shortcut icon" type="image/png" />
     </header>
     <body>
         <div class="MainMenu">
-            <script src="main.js"></script>
+            <script src="/staGeon/main.js"></script>
             <script src='/socket.io/socket.io.js'></script>
             <script>
                 const socket = io();
@@ -200,7 +200,7 @@
                 <div id="particles-js" style="width: 100vw; height: 100vh">
                 </div>
                 <div class="MenuBackground">
-                    <img class="Icon" src="resources/logo.png"></img>
+                    <img class="Icon" src="/staGeon/resources/logo.png"></img>
                     <form class="RoomForm">
                         <input class="RoomId" placeholder="Código da sala" onInput="RoomIdHandler()" onPropertychange="RoomIdHandler()"></input>
                     </form>
@@ -235,7 +235,7 @@
                             <div class="RoomIdTextPlaceHolder" onclick="copyToClipboard(CurrentRoom); document.getElementsByClassName('CopyText')[0].textContent = 'Copiado!'" onmouseover="MouseSelectedText = true;BoxWrapper('CopyTextSpeechBox')" onmouseleave="MouseSelectedText = false;BoxWrapper('CopyTextSpeechBox')">
                                 <p id="RoomIdText" class="RoomIdText">1234567</p>
                             </div>
-                        <img class="BlockRoomId" title="Esconder código" src="/resources/blockicon.png" onclick="if (document.getElementById('RoomIdText').textContent !== 'Oculto!') {document.getElementById('RoomIdText').textContent = 'Oculto!'; document.getElementsByClassName('BlockRoomId')[0].src=`/resources/allowicon.png`; document.getElementsByClassName('BlockRoomId')[0].title='Mostrar código'} else {document.getElementById('RoomIdText').textContent = CurrentRoom; document.getElementsByClassName('BlockRoomId')[0].src=`/resources/blockicon.png`; document.getElementsByClassName('BlockRoomId')[0].title='Esconder código'}"></img>
+                        <img class="BlockRoomId" title="Esconder código" src="/staGeon/resources/blockicon.png" onclick="if (document.getElementById('RoomIdText').textContent !== 'Oculto!') {document.getElementById('RoomIdText').textContent = 'Oculto!'; document.getElementsByClassName('BlockRoomId')[0].src=`/staGeon/resources/allowicon.png`; document.getElementsByClassName('BlockRoomId')[0].title='Mostrar código'} else {document.getElementById('RoomIdText').textContent = CurrentRoom; document.getElementsByClassName('BlockRoomId')[0].src=`/staGeon/resources/blockicon.png`; document.getElementsByClassName('BlockRoomId')[0].title='Esconder código'}"></img>
                         </div>
                         <div class="CopyTextSpeechBox" style="display: none" onclick="copyToClipboard(CurrentRoom); document.getElementsByClassName('CopyText')[0].textContent = 'Copiado!'" onmouseover="MouseSelectedBox = true;BoxWrapper('CopyTextSpeechBox')" onmouseleave="MouseSelectedBox = false;BoxWrapper('CopyTextSpeechBox')">
                             <b class="CopyText">Copiar Código</b>
@@ -254,7 +254,7 @@
                         <span class="SideA">0</span>
                         <span class="SideB">0</span>
                         <span class="SideH">X</span>
-                        <img class="Triangle" src="/resources/RetangleTriangle.png"></img>
+                        <img class="Triangle" src="/staGeon/resources/RetangleTriangle.png"></img>
                         <form class="QuestionFormInput">
                             <input class="QuestionTextInput" required='required' type="text" placeholder="Hipotenusa" onInput="HipotenusaResulver()" onPropertychange="HipotenusaResulver()">
                             <input class="QuestionTextSubmit" type="submit" value="Pronto!" disabled>
@@ -264,16 +264,16 @@
                         <p class="PlayerInTheRoomHeader">Jogadores na sala:</p>
                         <div class="Players"></div>
                     </div>
-                    <div class="Dice" onclick="RunDice()" style="background-image: url('/resources/DiceIcon.png');">
+                    <div class="Dice" onclick="RunDice()" style="background-image: url('/staGeon/resources/DiceIcon.png');">
                         <div class="DiceNumber" style="display: none">7</div>
                     </div>
                 </div>
                 <div class='boardWrapper'>
                     <div class="Characters">
-                        <div id="C0" class="Caracter1" style="background-image: url('/resources/PawnBlue.png');"></div>
-                        <div id="C1" class="Caracter2" style="display: none; background-image: url('/resources/PawnRed.png');"></div>
-                        <div id="C2" class="Caracter3" style="display: none; background-image: url('/resources/PawnOrange.png');"></div>
-                        <div id="C3" class="Caracter4" style="display: none; margin-right: 5vw;background-image: url('/resources/PawnPurple.png');"></div>
+                        <div id="C0" class="Caracter1" style="background-image: url('/staGeon/resources/PawnBlue.png');"></div>
+                        <div id="C1" class="Caracter2" style="display: none; background-image: url('/staGeon/resources/PawnRed.png');"></div>
+                        <div id="C2" class="Caracter3" style="display: none; background-image: url('/staGeon/resources/PawnOrange.png');"></div>
+                        <div id="C3" class="Caracter4" style="display: none; margin-right: 5vw;background-image: url('/staGeon/resources/PawnPurple.png');"></div>
                     </div>
                     <div class='board'>
                         <div id="0" class="Start"></div>

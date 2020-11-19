@@ -84,7 +84,9 @@ function Loaded() {
     })
     socket.on('UserLeave', (Data) => {
         Data = JSON.parse(Data);
-        document.getElementById(Data.UserLeaved).remove();
+        if (document.getElementById(Data.UserLeaved)) {
+            document.getElementById(Data.UserLeaved).remove();
+        }
         AddUserPawn();
     })
     socket.on('FullRoom', () => {
@@ -320,8 +322,19 @@ function StartTheGame(RoomID) {
         Playrs.forEach((element, index) => {
             if (index === Data.Turn) {
                 element.style.webkitTextStroke = '1px #FFAA00';
+                element.innerHTML = element.innerHTML+" <--";
             } else {
                 element.style.webkitTextStroke = '0px #0000';
+                element.innerHTML = element.innerHTML.toString().split(" &lt;--").join("")
+            }
+            if (index === 0) {
+                element.style.color = '#5577FF'
+            } else if (index === 1) {
+                element.style.color = '#FF5555';
+            } else if (index === 2) {
+                element.style.color = '#FFCC33';
+            } else if (index === 3) {
+                element.style.color = '#FFAAFF';
             }
         })
     })

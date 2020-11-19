@@ -607,7 +607,7 @@ body {
     width: 21vw;
     min-height: 10vw;
     height: auto;
-    background-color: #FFFC;
+    background-color: #FFF3;
     border-bottom-left-radius: 25px;
     box-shadow: 0px 0px 10px #111;
     display: flex;
@@ -806,7 +806,7 @@ body {
 }
 
 .box {
-    background-image: url('/resources/TableBlock.jpg');
+    background-image: url('/staGeon/resources/TableBlock.jpg');
     background-repeat: no-repeat;
     background-size: 100% 100%;
     border: 0.1vw solid 530074;
@@ -840,13 +840,13 @@ body {
     margin: 0;
     width: 100vw;
     height: 100vh;
-    background-image: url('/resources/GameBackground.png');
+    background-image: url('/staGeon/resources/GameBackground.png');
     z-index: -30000;
     background-size: 100% 100%;
 }
 
 .board .Start {
-    background-image: url('/resources/StartBlock.png');
+    background-image: url('/staGeon/resources/StartBlock.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
     border: 0.1vw solid #530074;
@@ -872,7 +872,7 @@ body {
 }
 
 .board .End {
-    background-image: url('/resources/EndBlock.png');
+    background-image: url('/staGeon/resources/EndBlock.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
     border: 0.1vw solid #530074;
