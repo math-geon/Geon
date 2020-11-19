@@ -310,8 +310,10 @@ function UserNameSubmit(event) {
     socket.emit('RegisterUserName', JSON.stringify({RoomId: CurrentRoom, UserId: UserId, UserName: UserName}))
     document.getElementsByClassName('UserNameInput')[0].id = 'popup-close';
     setTimeout(()=>{
-        document.getElementsByClassName('UserNameInput')[0].id = 'popup-close';
+        document.getElementsByClassName('UserNameInput')[0].id = '';
         document.getElementsByClassName('UserNameInput')[0].style.display = 'none';
+        document.getElementsByClassName('Rules')[0].style.display = 'block';
+        document.getElementsByClassName('Rules')[0].id = 'popup';
     }, 300)
 }
 
@@ -321,6 +323,7 @@ function StartTheGame(RoomID) {
         Playrs = [...document.getElementsByClassName('Players')[0].children];
         Playrs.forEach((element, index) => {
             if (index === Data.Turn) {
+                element.innerHTML = element.innerHTML.toString().split(" &lt;--").join("")
                 element.style.webkitTextStroke = '1px #FFAA00';
                 element.innerHTML = element.innerHTML+" <--";
             } else {
@@ -466,4 +469,12 @@ function Lose() {
         document.getElementById('C2').style.left = 0+'vw';
         document.getElementById('C3').style.top = 0+'vw';
         document.getElementById('C3').style.left = 0+'vw';
+}
+
+function CloseRules() {
+    document.getElementsByClassName('Rules')[0].id = 'popup-close';
+    setTimeout(()=>{
+        document.getElementsByClassName('Rules')[0].id = '';
+        document.getElementsByClassName('Rules')[0].style.display = 'none';
+    }, 300)
 }
