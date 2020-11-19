@@ -887,6 +887,7 @@ body {
     bottom: 25vh;
     left: 2vw;
     background-repeat: no-repeat;
+    cursor: pointer;
     background-size: 100% 100%;
 }
 
