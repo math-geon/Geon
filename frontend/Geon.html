@@ -169,14 +169,14 @@
             <div class="RoomFulled" style="display: none">
                 <div class="ErrorBox">
                     <h1 class="ErrorTextTitle">Sala Cheia!</h1>
-                    <h1 class="ErrorTextDescription">Não foi possivel entrar na sala pois ela se encontra cheia.</h1>
+                    <h1 class="ErrorTextDescription">Não foi possivel entrar na sala, pois ela se encontra cheia.</h1>
                     <button class="CloseWarn" onclick="document.getElementsByClassName('RoomFulled')[0].style.display = 'none'">Ok</button>
                     <div class="ErrorEffect"></div>
                 </div>
             </div>
             <div class="Winning" style="display: none">
                 <div class="WinBox">
-                    <h1 class="WinTextTitle">Parabéns você ganhou!</h1>
+                    <h1 class="WinTextTitle">Parabéns, você ganhou!</h1>
                     <h1 class="WinTextDescription">Você se provou um mestre do teorema de pitagoras. Parabéns!</h1>
                     <button class="CloseWin" onclick="Win()">Ok</button>
                     <div class="WinEffect"></div>
@@ -185,7 +185,7 @@
             <div class="Losing" style="display: none">
                 <div class="LoseBox">
                     <h1 class="LoseTextTitle">Que pena você perdeu!</h1>
-                    <h1 class="LoseTextDescription">Você NÃO é um mestre do teorema de pitagoras. ;-;</h1>
+                    <h1 class="LoseTextDescription">Não foi dessa vez, tente novamente. ;-;</h1>
                     <button class="CloseLose" onclick="Lose()">Ok</button>
                     <div class="LoseEffect"></div>
                 </div>
@@ -238,14 +238,14 @@
                         <img class="BlockRoomId" title="Esconder código" src="/staGeon/resources/blockicon.png" onclick="if (document.getElementById('RoomIdText').textContent !== 'Oculto!') {document.getElementById('RoomIdText').textContent = 'Oculto!'; document.getElementsByClassName('BlockRoomId')[0].src=`/staGeon/resources/allowicon.png`; document.getElementsByClassName('BlockRoomId')[0].title='Mostrar código'} else {document.getElementById('RoomIdText').textContent = CurrentRoom; document.getElementsByClassName('BlockRoomId')[0].src=`/staGeon/resources/blockicon.png`; document.getElementsByClassName('BlockRoomId')[0].title='Esconder código'}"></img>
                         </div>
                         <div class="CopyTextSpeechBox" style="display: none" onclick="copyToClipboard(CurrentRoom); document.getElementsByClassName('CopyText')[0].textContent = 'Copiado!'" onmouseover="MouseSelectedBox = true;BoxWrapper('CopyTextSpeechBox')" onmouseleave="MouseSelectedBox = false;BoxWrapper('CopyTextSpeechBox')">
-                            <b class="CopyText">Copiar Código</b>
+                            <b class="CopyText">Copiar código</b>
                         </div>
                     </div>
                     <div class="UserNameInput" style="display: none">
                         <p class="UserNameHeader">Nome de usuário:</p>
                         <p class="FormText">Insira seu nome de usuário: <t class="LittleWarn">(Ele estará visível para todos na sala)</t></p>
                         <form class="userInput">
-                            <input class="UserTextInput" required='required' type="text" placeholder="Um nome muito legal!" onInput="UsernameHandler()" onPropertychange="UsernameHandler()">
+                            <input class="UserTextInput" required='required' type="text" placeholder="Um nome legal!" onInput="UsernameHandler()" onPropertychange="UsernameHandler()">
                             <input class="UserTextSubmit" type="submit" value="Pronto!" disabled>
                         </form>      
                     </div>
@@ -253,9 +253,9 @@
                         <h1 class="Title">Regras:</h1>
                         <ol class="RulesList">
                             <li>Decide-se quem vai começar o jogo por ordem de chegada.</li>
-                            <li>O primeiro jogador clica no dado no dado e avança o número de casas indicado (o INíCIO) não se inclui.</li>
+                            <li>O primeiro jogador clica no dado e vai para o número de casas indicados (o INíCIO não se inclui).</li>
                             <li>Após isso, o jogador recebe uma questão. Caso o jogador acerte, ele permanece na casa. Caso ele erre, ele volta para a casa onde estava.</li>
-                            <li>O vencedor será o primeiro a passar à casa CHEGADA.</li>
+                            <li>O vencedor será o primeiro a passar a casa CHEGADA.</li>
                         </ol>
                         <button class="CloseRules" onclick="CloseRules()">Entendi</button>
                     </div>
@@ -266,8 +266,8 @@
                         <span class="SideH">X</span>
                         <img class="Triangle" src="/staGeon/resources/RetangleTriangle.png"></img>
                         <form class="QuestionFormInput">
-                            <input class="QuestionTextInput" required='required' type="text" placeholder="Hipotenusa" onInput="HipotenusaResulver()" onPropertychange="HipotenusaResulver()">
-                            <input class="QuestionTextSubmit" type="submit" value="Pronto!" disabled>
+                            <input class="QuestionTextInput" required='required' type="text" placeholder="Resposta" onInput="HipotenusaResulver()" onPropertychange="HipotenusaResulver()">
+                            <input class="QuestionTextSubmit" type="submit" value="Enviar" disabled>
                         </form>      
                     </div>
                     <div class="PlayerInTheRoom">
