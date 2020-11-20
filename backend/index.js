@@ -14,7 +14,7 @@ app.use(express.static(FrontEndPath));
 app.get("/", (req, res)=> {
     res.sendFile(path.resolve(FrontEndPath, 'Geon.html'))
 })
-
+//inicia o socket
 connection(io);
 
 //Liga o servidor.
