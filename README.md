@@ -16,13 +16,3 @@ Um jogo simples feito usando:
     Socket.Io
   }
 ```
-
-Criado por:
-
-[Gabriel Uirauna](https://github.com/GabrielUirauna/) - Criou o repositorio;
-
-[Space_Interprise](https://github.com/emanuelfranklyn/) - Programou o jogo inteirou nas pressas;
-
---[Mais um bando de gente]--
-
-Fiquei com preguiça de por todo mundo aqui.
