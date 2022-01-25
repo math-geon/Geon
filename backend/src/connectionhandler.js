@@ -74,7 +74,7 @@ function Updater(socket, Data) {
                 ids.push(Data.userId);
                 cleaner();
             } else {
-                element2.socket.emit("UpdateUserId", JSON.stringify({RoomId: element.Id, OldId: Data.oldUserId, NewId: Data.userId}))
+                element2.socket.emit("UpdateUserId", JSON.stringify({RoomId: element.Id, OldId: Data.oldUserId, NewId: getRandomString(12)}))
             }
         })
     })
