@@ -67,15 +67,15 @@ function GenerateRoom(socket, Data) {
 
 function Updater(socket, Data) {
     Data = JSON.parse(Data);
+    var UserNewId = getRandomString(12);
     ActiveRooms.forEach((element, index)=> {
         element.Players.forEach((element2, index2) => {
             if (element2.Id === Data.oldUserId) {
-                ActiveRooms[index].Players[index2].Id = Data.userId;
-                ids.push(Data.userId);
+                ActiveRooms[index].Players[index2].Id = UserNewId;
+                ids.push(UserNewId);
                 cleaner();
-            } else {
-                element2.socket.emit("UpdateUserId", JSON.stringify({RoomId: element.Id, OldId: Data.oldUserId, NewId: getRandomString(12)}))
             }
+            element2.socket.emit("UpdateUserId", JSON.stringify({RoomId: element.Id, OldId: Data.oldUserId, NewId: UserNewId}));
         })
     })
 }
