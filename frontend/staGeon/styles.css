@@ -654,7 +654,7 @@ body {
     min-height: 10vw;
     height: auto;
     flex-direction: column;
-    -webkit-text-stroke-width: 1px;
+    paint-order: stroke fill;
 }
 
 .PlayerWrapper {
@@ -917,10 +917,15 @@ body {
     margin-left: 2.1vw;
     color:#FFF;
     font-size: 5vw;
-    color: black;
-    -webkit-text-fill-color: white; /* Will override color (regardless of order) */
-    -webkit-text-stroke-width: 1px;
-    -webkit-text-stroke-color: black;
+    text-shadow:
+    -5px -5px 0 #000,
+     0   -5px 0 #000,
+     5px -5px 0 #000,
+     5px  0   0 #000,
+     5px  5px 0 #000,
+     0    5px 0 #000,
+    -5px  5px 0 #000,
+    -5px  0   0 #000;
 }
 
 .Characters {
