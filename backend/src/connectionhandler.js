@@ -194,8 +194,8 @@ function RunDice(socket, Data) {
     }
   });
   if (itsUserTurn && !ActiveRooms[RoomIndex].Players[UserIndex].QSheld) {
-    // DiceResult = Math.floor(Math.random() * ((6 - 1) + 1) + 1);
-    const DiceResult = (18 * 2) + 1;
+    const DiceResult = Math.floor(Math.random() * ((6 - 1) + 1) + 1);
+    // const DiceResult = (18 * 2) + 1; // Debug
     ActiveRooms[RoomIndex].Players[UserIndex].NextPosition = ActiveRooms[RoomIndex].Players[UserIndex].Position + DiceResult;
     ActiveRooms[RoomIndex].Players.forEach((element) => {
       element.socket.emit('DiceRolled', JSON.stringify({ RoomId: Data.RoomId, UserId: Data.UserId, DiceResult: DiceResult, UserPosition: ActiveRooms[RoomIndex].Players[UserIndex].NextPosition }));
