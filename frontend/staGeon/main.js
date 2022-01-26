@@ -1,6 +1,6 @@
 var MouseSelectedText = false;
 var MouseSelectedBox = false;
-var loaded = false;
+var loaded = true;
 
 const Board1 = [1,2,3,4,5,6,7,8,9,10];
 const Board2 = [0,0,0,0,0,0,0,0,0,11];
@@ -52,10 +52,10 @@ function copyToClipboard(text) {
 
 var CurrentRoom = '';
 var UserName = '';
-var UserId = getRandomString(12);
+var UserId = '';
 
 function Loaded() {
-    loaded = true;
+    if (loaded) return;
     socket.on('Win', () => {
         document.getElementsByClassName('Winning')[0].style.display = 'block';
     })
@@ -131,18 +131,29 @@ function Loaded() {
     })
     document.getElementsByClassName('RoomForm')[0].addEventListener('submit', PlayRoomIdBlockAndExecute)
     document.getElementsByClassName('QuestionFormInput')[0].addEventListener('submit', ResponseQ);
+
+    socket.on('SetID', (id) => {
+        UserId = id;
+        console.log('My new ID is: ' + id);
+    });
+
     socket.on('reconnect', ()=>{
-       newUserId = getRandomString(12);
-        oldUserId = UserId
-        socket.emit('Reconnector', JSON.stringify({oldUserId: oldUserId, userId: newUserId}));
-        Players = [...document.getElementsByClassName('Players')[0].children]
+        console.log('Reconnect!');
+        socket.emit('Reconnector', JSON.stringify({oldUserId: UserId}));
+    });
+
+    socket.on('ChangeID', (Data)=>{
+        if (UserId === '') return;
+        console.log('Changing ID... ' + Data);
+        Data = JSON.parse(Data);
+        Players = [...document.getElementsByClassName('Players')[0].children];
         Players.forEach((element, index) => {
-            if (element.id === oldUserId) {
-                element.id = newUserId;
+            if (element.id === Data.oldUserId) {
+                element.id = Data.newUserId;
             }
         })
-        UserId = newUserId;
-    })
+        UserId = Data.newUserId;
+    });
 
     socket.on('UpdateUserId', (Data) => {
         Data = JSON.parse(Data);
@@ -208,7 +219,7 @@ function Loaded() {
         }
         document.getElementById('C'+UserIndex.toString()).style.top = (Math.floor(Collumn-1)*7)+'vw';
         document.getElementById('C'+UserIndex.toString()).style.left = (Math.floor(Row)*7)+'vw';
-    })
+    });
     socket.on('QuestionToAnswer', (Data) => {
         Data = JSON.parse(Data);
         document.getElementsByClassName("QuestionInput")[0].id = 'popup';
@@ -216,16 +227,42 @@ function Loaded() {
         document.getElementsByClassName('QuestionInput')[0].style.display = 'block';
         document.getElementsByClassName('SideA')[0].innerHTML = Data.SideA;
         document.getElementsByClassName('SideB')[0].innerHTML = Data.SideB;
-    })
-}
+    });
 
-function getRandomString(length) {
-    var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var result = '';
-    for ( var i = 0; i < length; i++ ) {
-        result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
-    }
-    return result;
+    socket.on('RoomId', (Data) => {
+        Data = JSON.parse(Data)
+        CurrentRoom = Data.RoomId;
+        ProgressbarHandler("ProgressProgressBar", "49.5", "100");
+        setTimeout(()=>{
+            StartTheGame(CurrentRoom);
+        },1000)
+    });
+
+    socket.on('Turn', (Data)=> {
+        Data= JSON.parse(Data);
+        Playrs = [...document.getElementsByClassName('Players')[0].children];
+        Playrs.forEach((element, index) => {
+            if (index === Data.Turn) {
+                element.innerHTML = element.innerHTML.toString().split(" &lt;--").join("")
+                element.style.webkitTextStroke = '1px #FFAA00';
+                element.innerHTML = element.innerHTML+" <--";
+            } else {
+                element.style.webkitTextStroke = '0px #0000';
+                element.innerHTML = element.innerHTML.toString().split(" &lt;--").join("")
+            }
+            if (index === 0) {
+                element.style.color = '#5577FF'
+            } else if (index === 1) {
+                element.style.color = '#FF5555';
+            } else if (index === 2) {
+                element.style.color = '#FFCC33';
+            } else if (index === 3) {
+                element.style.color = '#FFAAFF';
+            }
+        });
+    });
+
+    loaded = true;
 }
 
 function StartGame() {
@@ -283,14 +320,6 @@ function CreateGame() {
     document.getElementsByClassName("ProgressProgressBar")[0].style.width = '0vw';
     socket.emit('GenerateRoom', JSON.stringify({UserId: UserId}));
     ProgressbarHandler("ProgressProgressBar", "49.5", "75");
-    socket.on('RoomId', (Data) => {
-        Data = JSON.parse(Data)
-        CurrentRoom = Data.RoomId;
-        ProgressbarHandler("ProgressProgressBar", "49.5", "100");
-        setTimeout(()=>{
-            StartTheGame(CurrentRoom);
-        },1000)
-    })
 }
 
 function UsernameHandler() {
@@ -318,35 +347,12 @@ function UserNameSubmit(event) {
 }
 
 function StartTheGame(RoomID) {
-    socket.on('Turn', (Data)=> {
-        Data= JSON.parse(Data);
-        Playrs = [...document.getElementsByClassName('Players')[0].children];
-        Playrs.forEach((element, index) => {
-            if (index === Data.Turn) {
-                element.innerHTML = element.innerHTML.toString().split(" &lt;--").join("")
-                element.style.webkitTextStroke = '1px #FFAA00';
-                element.innerHTML = element.innerHTML+" <--";
-            } else {
-                element.style.webkitTextStroke = '0px #0000';
-                element.innerHTML = element.innerHTML.toString().split(" &lt;--").join("")
-            }
-            if (index === 0) {
-                element.style.color = '#5577FF'
-            } else if (index === 1) {
-                element.style.color = '#FF5555';
-            } else if (index === 2) {
-                element.style.color = '#FFCC33';
-            } else if (index === 3) {
-                element.style.color = '#FFAAFF';
-            }
-        })
-    })
     function WaitLoad() {
         if (loaded === false) {
             setTimeout(()=>{WaitLoad()}, 2500)
         } else {
-            socket.emit('RegisterUser', JSON.stringify({RoomId: RoomID, UserId: UserId}))
-            document.getElementsByClassName('userInput')[0].addEventListener('submit', UserNameSubmit)
+            socket.emit('RegisterUser', JSON.stringify({RoomId: RoomID}));
+            document.getElementsByClassName('userInput')[0].addEventListener('submit', UserNameSubmit);
             document.getElementsByClassName("Menus")[0].style.display = 'none';
             document.getElementsByClassName("Game")[0].style.display = 'block';
             document.getElementsByClassName("RoomIdText")[0].innerHTML = RoomID;

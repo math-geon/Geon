@@ -43,7 +43,7 @@ div[vw] [vp] [vp-controls] {
 }
 
 [vp] [vp-rate-button] .vp-button img {
-    display: none !important;
+    display: block !important;
 }
 
 #gameContainer div div:nth-child(1) {
@@ -51,7 +51,16 @@ div[vw] [vp] [vp-controls] {
 }
 
 [vw] [vw-access-button] {
-    display: none !important;
+    margin-bottom: 0px;
+    display: block !important;
+    pointer-events: all;
+}
+
+[vw] [vw-access-button].active {
+    display: block !important;
+    position: static;
+    margin-bottom: 60vh;
+    pointer-events: all;
 }
 
 body {

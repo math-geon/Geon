@@ -1,7 +1,7 @@
 const RoomMaxPersons = 4;
 const UsableHomes = 37;
 
-ActiveRooms = []
+ActiveRooms = [];
 ids = [];
 
 function cleaner() {
@@ -36,6 +36,7 @@ function getRandomString(length) {
 }
 
 function reconnect(socket) {
+    console.log('Reconnect requested');
     socket.broadcast.emit('reconnect');
     cleaner();
 }
@@ -68,16 +69,19 @@ function GenerateRoom(socket, Data) {
 function Updater(socket, Data) {
     Data = JSON.parse(Data);
     var UserNewId = getRandomString(12);
+    console.log('Updating User ' + Data.oldUserId);
     ActiveRooms.forEach((element, index)=> {
         element.Players.forEach((element2, index2) => {
             if (element2.Id === Data.oldUserId) {
                 ActiveRooms[index].Players[index2].Id = UserNewId;
+                element2.socket.emit("ChangeID", JSON.stringify({RoomId: element.Id, oldUserId: Data.oldUserId, newUserId: UserNewId}));
                 ids.push(UserNewId);
                 cleaner();
+            } else {
+                element2.socket.emit("UpdateUserId", JSON.stringify({RoomId: element.Id, OldId: Data.oldUserId, NewId: UserNewId}));
             }
-            element2.socket.emit("UpdateUserId", JSON.stringify({RoomId: element.Id, OldId: Data.oldUserId, NewId: UserNewId}));
-        })
-    })
+        });
+    });
 }
 
 function verifyer(socket, executer, Data, UserIn) {
@@ -107,55 +111,66 @@ function verifyer(socket, executer, Data, UserIn) {
 }
 
 function LogUserIn(socket, Data) {
-    RoomAlreadyContainsUser = false;
+    var UserId;
+    do {
+        UserId = getRandomString(12);
+    } while (ids.includes(UserId));
+
+    var isRoomFull = false;
+    
     ActiveRooms.forEach((element, index)=>{
         if (element.Id === Data.RoomId) {
             if (ActiveRooms[index].Players.length >= RoomMaxPersons) {
                 socket.emit('FullRoom');
-                RoomAlreadyContainsUser = true;
+                isRoomFull = true;
             }
+        }
+    });
+
+    if (isRoomFull) return;
+
+    RoomIndex = 0;
+
+    ActiveRooms.forEach((element, index)=>{
+        if (element.Id === Data.RoomId) {
+            RoomIndex = index;
             ActiveRooms[index].Players.forEach((element2)=>{
-                if (element2.Id === Data.UserId) {
-                    RoomAlreadyContainsUser = true;
-                }
+                element2.socket.emit('NewUser', JSON.stringify({RoomId: element.Id, EnteredUserId: UserId}));
+                socket.emit('NewUser', JSON.stringify({RoomId: element.Id, EnteredUserId: element2.Id}));
             })
         }    
-    })
-    if (!RoomAlreadyContainsUser) {
-        RoomIndex = 0;
-        ActiveRooms.forEach((element, index)=>{
-            if (element.Id === Data.RoomId) {
-                RoomIndex = index;
-                ActiveRooms[index].Players.forEach((element2)=>{
-                    element2.socket.emit('NewUser', JSON.stringify({RoomId: element.Id, EnteredUserId: Data.UserId}))
-                    socket.emit('NewUser', JSON.stringify({RoomId: element.Id, EnteredUserId: element2.Id}))
-                })
-            }    
-        })
-        PlayerScheme = {
-            Id: "",
-            socket,
-            Name: "",
-            Position: 0,
-            NextPosition: 0,
-            QSideA: 0,
-            QSideB: 0,
-            QSideH: 0,
-            QSheld: false,
-        }
-        PlayerScheme.Id = Data.UserId;
-        PlayerScheme.socket = socket;
-        ActiveRooms[RoomIndex].Players.push(PlayerScheme);
-        socket.emit('NewUser', JSON.stringify({RoomId: Data.RoomId, EnteredUserId: Data.UserId}))
+    });
+
+    PlayerScheme = {
+        Id: "",
+        socket,
+        Name: "",
+        Position: 0,
+        NextPosition: 0,
+        QSideA: 0,
+        QSideB: 0,
+        QSideH: 0,
+        QSheld: false,
     }
+
+    PlayerScheme.Id = UserId;
+    PlayerScheme.socket = socket;
+    ActiveRooms[RoomIndex].Players.push(PlayerScheme);
+
+    ids.push(UserId);
+
+    socket.emit('SetID', UserId);
+
+    socket.emit('NewUser', JSON.stringify({RoomId: Data.RoomId, EnteredUserId: UserId}))
 }
 
 function RegisterUserName(socket, Data) {
+    var userName = Data.UserName.split(">").join(" ").split("<").join(" ").split("/").join(" ");
     ActiveRooms.forEach((element, index)=>{
         if (element.Id === Data.RoomId) {
             ActiveRooms[index].Players.forEach((element2, index2)=>{
                 if (element2.Id === Data.UserId) {
-                    ActiveRooms[index].Players[index2].Name = Data.UserName;
+                    ActiveRooms[index].Players[index2].Name = userName;
                 }
                 socket.emit('UserNameInformation', JSON.stringify({RoomId: element.Id, UserId: element2.Id, NickName: element2.Name}))
             })
@@ -188,7 +203,8 @@ function RunDice(socket, Data) {
         }
     })
     if (itsUserTurn && !ActiveRooms[RoomIndex].Players[UserIndex].QSheld) {
-        DiceResult = Math.floor(Math.random() * ((6 - 1) + 1) + 1);
+        // DiceResult = Math.floor(Math.random() * ((6 - 1) + 1) + 1);
+        DiceResult = (18*2) + ;
         ActiveRooms[RoomIndex].Players[UserIndex].NextPosition = ActiveRooms[RoomIndex].Players[UserIndex].Position + DiceResult; 
         ActiveRooms[RoomIndex].Players.forEach((element) => {
             element.socket.emit('DiceRolled', JSON.stringify({RoomId: Data.RoomId, UserId: Data.UserId, DiceResult: DiceResult, UserPosition: ActiveRooms[RoomIndex].Players[UserIndex].NextPosition}))
@@ -283,13 +299,21 @@ function QR(socket, Data) {
                 } else {
                     element.socket.emit('Lose');
                 }
-            })    
+            });
+            return closeRoom(ActiveRooms[RoomIndex]);
         }
         ActiveRooms[RoomIndex].Players[UserIndex].QSheld = false;
         ActiveRooms[RoomIndex].Players.forEach((element) => {
             element.socket.emit('Turn', JSON.stringify({RoomId: Data.RoomId, Turn: ActiveRooms[RoomIndex].Turn}));
         })
     }
+}
+
+function closeRoom(Room) {
+    Room.Players.forEach((player) => {
+        ids.splice(player.Id, 1);
+    });
+    ActiveRooms.splice(ActiveRooms.indexOf(Room), 1);
 }
 
 module.exports = (io) => {

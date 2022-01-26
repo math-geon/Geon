@@ -14,133 +14,6 @@
             <script>
                 const socket = io();
             </script>
-            <script class="ParticlesDefiner" src="https://vincentgarreau.com/particles.js/assets/_build/js/lib/particles.js"></script>
-            <script class="ParticleRunner">
-                function tryer() { 
-                    try{ 
-                        document.getElementsByClassName('active')[0].click();
-                        particlesJS("particles-js", {
-                            particles: {
-                                number: {
-                                value: 450,
-                                density: {
-                                    enable: true,
-                                    value_area: 789.1476416322727
-                                }
-                                },
-                                color: {
-                                value: "#FFF"
-                                },
-                                shape: {
-                                type: "circle",
-                                stroke: {
-                                    width: 0,
-                                    color: "#000000"
-                                },
-                                polygon: {
-                                    nb_sides: 5
-                                },
-                                image: {
-                                    src: "img/github.svg",
-                                    width: 100,
-                                    height: 100
-                                }
-                                },
-                                opacity: {
-                                value: 1,
-                                random: false,
-                                anim: {
-                                    enable: true,
-                                    speed: 0.2,
-                                    opacity_min: 0,
-                                    sync: false
-                                }
-                                },
-                                size: {
-                                value: 3,
-                                random: true,
-                                anim: {
-                                    enable: true,
-                                    speed: 2,
-                                    size_min: 0,
-                                    sync: false
-                                }
-                                },
-                                line_linked: {
-                                enable: false,
-                                distance: 150,
-                                color: "#ffffff",
-                                opacity: 0.4,
-                                width: 1
-                                },
-                                move: {
-                                enable: true,
-                                speed: 1,
-                                direction: "top",
-                                random: true,
-                                straight: false,
-                                out_mode: "out",
-                                bounce: false,
-                                attract: {
-                                    enable: false,
-                                    rotateX: 600,
-                                    rotateY: 1200
-                                }
-                                }
-                            },
-                            interactivity: {
-                                detect_on: "canvas",
-                                events: {
-                                onhover: {
-                                    enable: false,
-                                    mode: "bubble"
-                                },
-                                onclick: {
-                                    enable: false,
-                                    mode: "push"
-                                },
-                                resize: true
-                                },
-                                modes: {
-                                grab: {
-                                    distance: 400,
-                                    line_linked: {
-                                    opacity: 1
-                                    }
-                                },
-                                bubble: {
-                                    distance: 83.91608391608392,
-                                    size: 1,
-                                    duration: 3,
-                                    opacity: 1,
-                                    speed: 3
-                                },
-                                repulse: {
-                                    distance: 200,
-                                    duration: 0.4
-                                },
-                                push: {
-                                    particles_nb: 4
-                                },
-                                remove: {
-                                    particles_nb: 2
-                                }
-                                }
-                            },
-                            retina_detect: false
-                        })
-                        ProgressbarHandler("ProgressProgressBarBeforeGame", "49.5", "100", 1.7)
-                        setTimeout(()=>{ProgressbarHandler("ProgressProgressBarBeforeGame", "49.5", "100", 3)}, 1000);
-                        setTimeout(()=>{document.getElementsByClassName("ProgressProgressBarBeforeGame")[0].style.width = '49.5vw';}, 2000);
-                        setTimeout(()=>{document.getElementsByClassName("LoadingScreen")[0].id = 'Loaded'}, 2500);
-                        setTimeout(()=>{document.getElementsByClassName("LoadingScreen")[0].style.display = 'none'; Loaded()}, 5000)
-                    } catch (e) {
-                        ProgressbarHandler("ProgressProgressBarBeforeGame", "49.5", "75", 0.1)
-                        setTimeout(()=>{tryer()}, 5000)
-                    }
-                }; 
-                tryer()
-            </script>
                 <div vw class="enabled">
                     <div vw-access-button class="active"></div>
                     <div vw-plugin-wrapper>
@@ -188,12 +61,6 @@
                     <h1 class="LoseTextDescription">Não foi dessa vez, tente novamente. ;-;</h1>
                     <button class="CloseLose" onclick="Lose()">Ok</button>
                     <div class="LoseEffect"></div>
-                </div>
-            </div>
-            <div class="LoadingScreen" style="display: block">
-                <h1 class="LoadingText">Carregando...</h1>
-                <div class="ProgressBarBeforeGame">
-                    <div class="ProgressProgressBarBeforeGame"></div>
                 </div>
             </div>
             <div class="Menus" style="display: block">
@@ -350,5 +217,6 @@
                 </div>
             </div>
         </div>
+        <script>Loaded();</script>
     </body>
 </html>
