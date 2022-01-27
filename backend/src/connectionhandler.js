@@ -2,6 +2,7 @@ const RoomMaxPersons = 4;
 const UsableHomes = 37;
 
 const ActiveRooms = [];
+const timeouts = [];
 const ids = [];
 
 function cleaner() {
@@ -10,19 +11,25 @@ function cleaner() {
     ActiveRooms.forEach((element, index) => {
       element.Players.forEach((element2, index2) => {
         if (!ids.includes(element2.Id)) {
+          console.log('Disconnecting ' + element2.Id);
+          console.log(ActiveRooms[index].Players[index2]);
           ActiveRooms[index].Players.splice(index2, 1);
           ActiveRooms[index].Players.forEach((element3) => {
             element3.socket.emit('UserLeave', JSON.stringify({ RoomId: element.Id, UserLeaved: element2.Id }));
           });
+          element2.socket.emit('ConnectionFailed');
+          element2.socket.disconnect(0);
         }
       });
     });
     ActiveRooms.forEach((element, index) => {
       if (element.Players.length === 0) {
+        console.log('Closing Room ' + element.Id);
         ActiveRooms.splice(index, 1);
       }
     });
-    // ids = [];
+    console.log('Active Rooms: ' + ActiveRooms.length);
+    console.log('Rooms: ', ActiveRooms);
   }, 5000);
 }
 
@@ -37,11 +44,27 @@ function getRandomString(length) {
 
 function reconnect(socket) {
   console.log('Reconnect requested');
+  ActiveRooms.forEach((element, index) => {
+    element.Players.forEach((element2, index2) => {
+      if (element2.socket === socket) {
+        const timeouter = {};
+        timeouter[element2.Id] = setTimeout(() => {
+          console.log('Timeout ' + element2.Id);
+          ids.splice(ids.indexOf(element2.Id), 1);
+          timeouts.splice(timeouts.indexOf(timeouter), 1);
+          cleaner();
+        }, 15000);
+        timeouts.push(timeouter);
+        socket.broadcast.emit('Reconnecting', JSON.stringify({ RoomId: element.Id, UserId: element2.Id }));
+      }
+    });
+  });
   socket.broadcast.emit('reconnect');
   cleaner();
 }
 
 function GenerateRoom(socket, Data) {
+  if (typeof Data !== 'string') return;
   var RoomScheme = {
     Id: '',
     Players: [],
@@ -60,9 +83,19 @@ function GenerateRoom(socket, Data) {
 }
 
 function Updater(socket, Data) {
+  if (typeof Data !== 'string') return;
   Data = JSON.parse(Data);
   var UserNewId = getRandomString(12);
   console.log('Updating User ' + Data.oldUserId);
+
+  timeouts.forEach((element, index) => {
+    if (element[Data.oldUserId]) {
+      console.log('User Reconnected');
+      clearTimeout(element[Data.oldUserId]);
+      timeouts.splice(index, 1);
+    }
+  });
+
   ActiveRooms.forEach((element, index) => {
     element.Players.forEach((element2, index2) => {
       if (element2.Id === Data.oldUserId) {
@@ -80,6 +113,12 @@ function Updater(socket, Data) {
 function verifyer(socket, executer, Data, UserIn) {
   if (UserIn === undefined) {
     UserIn = true;
+  }
+  if (typeof Data !== 'string') {
+    socket.emit('ConnectionFailed');
+    socket.disconnect(0);
+    socket.destroy();
+    return;
   }
   Data = JSON.parse(Data);
   var RoomContainsUser = false;
@@ -130,6 +169,7 @@ function LogUserIn(socket, Data) {
       ActiveRooms[index].Players.forEach((element2) => {
         element2.socket.emit('NewUser', JSON.stringify({ RoomId: element.Id, EnteredUserId: UserId }));
         socket.emit('NewUser', JSON.stringify({ RoomId: element.Id, EnteredUserId: element2.Id }));
+        socket.emit('UserNameInformation', JSON.stringify({ RoomId: element.Id, UserId: element2.Id, NickName: element2.Name }));
       });
     }
   });
@@ -170,7 +210,8 @@ function RegisterUserName(socket, Data) {
         } else if (element2.Id === Data.UserId) {
           ActiveRooms[index].Players[index2].Name = userName;
         }
-        socket.emit('UserNameInformation', JSON.stringify({ RoomId: element.Id, UserId: element2.Id, NickName: element2.Name }));
+        console.log('Sending UserName to user: ' + element2.Id + ' ' + userName);
+        element2.socket.emit('UserNameInformation', JSON.stringify({ RoomId: element.Id, UserId: Data.UserId, NickName: userName }));
       });
     }
   });

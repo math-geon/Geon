@@ -76,27 +76,57 @@ function Loaded() {
 
   socket.on('NewUser', (Data) => {
     Data = JSON.parse(Data);
-    CreateUsers(Data.EnteredUserId);
+    if (!document.getElementById(Data.EnteredUserId)) {
+      CreateUsers(Data.EnteredUserId);
+    }
     AddUserPawn();
     const Playrs = [...document.getElementsByClassName('Players')[0].children];
     Playrs[0].style.webkitTextStroke = '1px #FFF';
+    document.getElementsByClassName('PlayerInTheRoomHeader')[0].innerHTML = `Jogadores na sala: (${playingPlayers.length}/4)`;
   });
 
   socket.on('UserNameInformation', (Data) => {
+    console.log('Received UserNameInformation: ' + Data);
     Data = JSON.parse(Data);
     const Players = [...document.getElementsByClassName('Players')[0].children];
+    document.getElementsByClassName('PlayerInTheRoomHeader')[0].innerHTML = `Jogadores na sala: (${playingPlayers.length}/4)`;
     Data.NickName = Data.NickName.split('>').join(' ');
     Data.NickName = Data.NickName.split('<').join(' ');
     Data.NickName = Data.NickName.split('/').join(' ');
+    var userFounded = false;
+    console.log(Data.UserId);
     Players.forEach((element) => {
       if (element.id === Data.UserId) {
-        playingPlayers.push({
-          id: Data.UserId,
-          name: Data.NickName,
-        });
-        element.innerHTML = Data.UserId === UserId ? `Você(${Data.NickName})` : Data.NickName;
+        userFounded = true;
+        if (playingPlayers.find((object) => { return object.id === Data.UserId; })) {
+          const player = playingPlayers.find((object) => { return object.id === Data.UserId; });
+          playingPlayers[player.index].name = Data.NickName;
+          console.log('Updated user on the list: ' + JSON.stringify(playingPlayers));
+        } else {
+          playingPlayers.push({
+            id: Data.UserId,
+            name: Data.NickName,
+            index: playingPlayers.length,
+          });
+          console.log('Added new user to the list: ' + JSON.stringify(playingPlayers));
+        }
+        element.innerHTML = Data.UserId === UserId ? `Você (${Data.NickName})` : Data.NickName;
       }
     });
+    if (!userFounded) {
+      playingPlayers.push({
+        id: Data.UserId,
+        name: Data.NickName,
+        index: playingPlayers.length,
+      });
+      console.log('Created new user to the list: ' + JSON.stringify(playingPlayers));
+      console.log(Data.UserId);
+      const Player = document.createElement('div');
+      Player.className = 'PlayerWrapper';
+      Player.id = Data.UserId;
+      Player.innerHTML = Data.UserId === UserId ? `Você (${Data.NickName})` : Data.NickName;
+      document.getElementsByClassName('Players')[0].appendChild(Player);
+    }
   });
 
   socket.on('UserLeave', (Data) => {
@@ -104,6 +134,11 @@ function Loaded() {
     if (document.getElementById(Data.UserLeaved)) {
       document.getElementById(Data.UserLeaved).remove();
     }
+    if (playingPlayers.find((object) => { return object.id === Data.UserId; })) {
+      playingPlayers.splice(playingPlayers.find((object) => { return object.id === Data.UserId; }).index, 1);
+    }
+    document.getElementsByClassName('Players')[0].children[0].style.webkitTextStroke = '1px #FFF';
+    document.getElementsByClassName('PlayerInTheRoomHeader')[0].innerHTML = `Jogadores na sala: (${playingPlayers.length}/4)`;
     AddUserPawn();
   });
 
@@ -122,6 +157,7 @@ function Loaded() {
     Playrs.forEach((element, index) => {
       element.remove();
     });
+    document.getElementsByClassName('PlayerInTheRoomHeader')[0].innerHTML = `Jogadores na sala: (${playingPlayers.length}/4)`;
     playingPlayers = [];
   });
 
@@ -140,6 +176,7 @@ function Loaded() {
     Playrs.forEach((element, index) => {
       element.remove();
     });
+    document.getElementsByClassName('PlayerInTheRoomHeader')[0].innerHTML = `Jogadores na sala: (${playingPlayers.length}/4)`;
     playingPlayers = [];
     document.getElementById('C0').style.top = 0 + 'vw';
     document.getElementById('C0').style.left = 0 + 'vw';
@@ -159,6 +196,21 @@ function Loaded() {
     console.log('My new ID is: ' + id);
   });
 
+  socket.on('Reconnecting', (Data) => {
+    Data = JSON.parse(Data);
+
+    if (Data.RoomId !== CurrentRoom) return;
+
+    const Players = [...document.getElementsByClassName('Players')[0].children];
+
+    Players.forEach((element) => {
+      if (element.id === Data.UserId) {
+        element.innerHTML = 'Reconnecting...';
+      }
+    });
+    document.getElementsByClassName('PlayerInTheRoomHeader')[0].innerHTML = `Jogadores na sala: (${playingPlayers.length}/4)`;
+  });
+
   socket.on('reconnect', () => {
     console.log('Reconnect!');
     socket.emit('Reconnector', JSON.stringify({ oldUserId: UserId }));
@@ -172,9 +224,14 @@ function Loaded() {
     Players.forEach((element, index) => {
       if (element.id === Data.oldUserId) {
         element.id = Data.newUserId;
-        playingPlayers.find((object) => { return object.id === Data.oldUserId; }).id = Data.newUserId;
+        const player = playingPlayers.find((object) => { return object.id === Data.oldUserId; });
+        if (player) {
+          playingPlayers[player.index].id = Data.newUserId;
+          console.log('changed id actual user NewId:' + Data.newUserId + ' OldId:' + Data.oldUserId + ' Index:' + player.index + ' Full Object:' + JSON.stringify(playingPlayers[player.index]));
+        }
       }
     });
+    document.getElementsByClassName('PlayerInTheRoomHeader')[0].innerHTML = `Jogadores na sala: (${playingPlayers.length}/4)`;
     UserId = Data.newUserId;
   });
 
@@ -184,9 +241,13 @@ function Loaded() {
     Players.forEach((element, index) => {
       if (element.id === Data.OldId) {
         element.id = Data.NewId;
-        playingPlayers.find((object) => { return object.id === Data.OldId; }).id = Data.NewId;
+        const checkPlayer = playingPlayers.find((object) => { return object.id === Data.OldId; });
+        if (!checkPlayer) return;
+        playingPlayers[checkPlayer.index].id = Data.NewId;
+        console.log('Updated some user ID: ' + Data.NewId + ' OldId:' + Data.OldId + ' Index:' + checkPlayer.index + ' Full Object:' + JSON.stringify(playingPlayers[checkPlayer.index]));
       }
     });
+    document.getElementsByClassName('PlayerInTheRoomHeader')[0].innerHTML = `Jogadores na sala: (${playingPlayers.length}/4)`;
   });
 
   socket.on('ConnectionFailed', () => {
@@ -243,11 +304,13 @@ function Loaded() {
     }
     document.getElementById('C' + UserIndex.toString()).style.top = (Math.floor(Collumn - 1) * 7) + 'vw';
     document.getElementById('C' + UserIndex.toString()).style.left = (Math.floor(Row) * 7) + 'vw';
+    document.getElementsByClassName('PlayerInTheRoomHeader')[0].innerHTML = `Jogadores na sala: (${playingPlayers.length}/4)`;
   });
   socket.on('QuestionToAnswer', (Data) => {
     questionPopupToRespond = true;
     Data = JSON.parse(Data);
     document.getElementsByClassName('QuestionInput')[0].id = 'popup';
+    document.getElementsByClassName('QuestionTextInput')[0].value = '';
     setTimeout(() => { document.getElementsByClassName('QuestionInput')[0].id = ''; }, 300);
     document.getElementsByClassName('QuestionInput')[0].style.display = 'block';
     document.getElementsByClassName('SideA')[0].innerHTML = Data.SideA;
@@ -267,8 +330,12 @@ function Loaded() {
     Data = JSON.parse(Data);
     const Playrs = [...document.getElementsByClassName('Players')[0].children];
     Playrs.forEach((element, index) => {
-      var userName = playingPlayers.find((object) => { return object.id === element.id; }).name || 'Aguardando...';
-      if (element.id === UserId) userName = `Você(${userName})`;
+      var userName = playingPlayers.find((object) => { return object.id === element.id; });
+      console.log('UserName:' + userName.name);
+      console.log('object:' + JSON.stringify(userName));
+      if (!userName) { userName = 'Aguardando...'; } else { userName = userName.name; }
+      console.log('UserName:' + userName.name);
+      if (element.id === UserId) userName = `Você (${userName})`;
       if (index === Data.Turn) {
         element.style.webkitTextStroke = '1px #FFFFFF';
         element.innerHTML = userName + ' <--';
@@ -286,6 +353,7 @@ function Loaded() {
         element.style.color = '#FFAAFF';
       }
     });
+    document.getElementsByClassName('PlayerInTheRoomHeader')[0].innerHTML = `Jogadores na sala: (${playingPlayers.length}/4)`;
   });
 
   socket.on('UserNameAlreadyExists', () => {
@@ -416,7 +484,6 @@ function RunDice() {
 
 function AddUserPawn() {
   const Players = [...document.getElementsByClassName('Players')[0].children];
-  Players.length -= 1;
   if (Players.length === 2) {
     document.getElementById('C0').style.display = 'block';
     document.getElementById('C1').style.display = 'block';
@@ -438,6 +505,7 @@ function AddUserPawn() {
     document.getElementById('C2').style.display = 'none';
     document.getElementById('C3').style.display = 'none';
   }
+  document.getElementsByClassName('PlayerInTheRoomHeader')[0].innerHTML = `Jogadores na sala: (${playingPlayers.length}/4)`;
 }
 
 function HipotenusaResulver() {
@@ -478,6 +546,7 @@ function Win() {
   Playrs.forEach((element, index) => {
     element.remove();
   });
+  document.getElementsByClassName('PlayerInTheRoomHeader')[0].innerHTML = `Jogadores na sala: (${playingPlayers.length}/4)`;
   playingPlayers = [];
   document.getElementById('C0').style.top = 0 + 'vw';
   document.getElementById('C0').style.left = 0 + 'vw';
@@ -505,6 +574,7 @@ function Lose() {
   Playrs.forEach((element, index) => {
     element.remove();
   });
+  document.getElementsByClassName('PlayerInTheRoomHeader')[0].innerHTML = `Jogadores na sala: (${playingPlayers.length}/4)`;
   playingPlayers = [];
   document.getElementById('C0').style.top = 0 + 'vw';
   document.getElementById('C0').style.left = 0 + 'vw';
