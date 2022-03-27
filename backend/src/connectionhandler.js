@@ -12,7 +12,6 @@ function cleaner() {
       element.Players.forEach((element2, index2) => {
         if (!ids.includes(element2.Id)) {
           console.log('Disconnecting ' + element2.Id);
-          console.log(ActiveRooms[index].Players[index2]);
           ActiveRooms[index].Players.splice(index2, 1);
           ActiveRooms[index].Players.forEach((element3) => {
             element3.socket.emit('UserLeave', JSON.stringify({ RoomId: element.Id, UserLeaved: element2.Id }));
@@ -28,8 +27,6 @@ function cleaner() {
         ActiveRooms.splice(index, 1);
       }
     });
-    console.log('Active Rooms: ' + ActiveRooms.length);
-    console.log('Rooms: ', ActiveRooms);
   }, 5000);
 }
 
@@ -43,7 +40,6 @@ function getRandomString(length) {
 }
 
 function reconnect(socket) {
-  console.log('Reconnect requested');
   ActiveRooms.forEach((element, index) => {
     element.Players.forEach((element2, index2) => {
       if (element2.socket === socket) {
@@ -53,7 +49,7 @@ function reconnect(socket) {
           ids.splice(ids.indexOf(element2.Id), 1);
           timeouts.splice(timeouts.indexOf(timeouter), 1);
           cleaner();
-        }, 15000);
+        }, 10000);
         timeouts.push(timeouter);
         socket.broadcast.emit('Reconnecting', JSON.stringify({ RoomId: element.Id, UserId: element2.Id }));
       }
@@ -90,7 +86,6 @@ function Updater(socket, Data) {
 
   timeouts.forEach((element, index) => {
     if (element[Data.oldUserId]) {
-      console.log('User Reconnected');
       clearTimeout(element[Data.oldUserId]);
       timeouts.splice(index, 1);
     }
@@ -203,11 +198,19 @@ function RegisterUserName(socket, Data) {
   if (userName.toLowerCase().includes('você')) userName = '~' + userName;
   ActiveRooms.forEach((element, index) => {
     if (element.Id === Data.RoomId) {
-      ActiveRooms[index].Players.forEach((element2, index2) => {
-        if (element2.Name.toLowerCase() === userName.toLowerCase()) {
+      var forceReturn = false;
+      for (var player of ActiveRooms[index].Players) {
+        if (player.Name.toLowerCase() === userName.toLowerCase()) {
           console.log('UserName already exists');
+          forceReturn = true;
           return socket.emit('UserNameAlreadyExists');
-        } else if (element2.Id === Data.UserId) {
+        }
+      }
+
+      if (forceReturn) return;
+
+      ActiveRooms[index].Players.forEach((element2, index2) => {
+        if (element2.Id === Data.UserId) {
           ActiveRooms[index].Players[index2].Name = userName;
         }
         console.log('Sending UserName to user: ' + element2.Id + ' ' + userName);

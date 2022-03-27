@@ -4,19 +4,20 @@
 
 ## A Fazeres
 
-- [X] Remover efeito de particulas;
+- [X] Remover efeito de partículas;
 - [X] Adicionar opção para desativar leitor de libras (Desativar auto ligamento da função);
-- [X] Corrigir vulnerabilidade onde o server não verifica o nome do usuario antes de enviar para os outros clients;
+- [X] Corrigir vulnerabilidade onde o server não verifica o nome do usuário antes de enviar para os outros clients;
 - [X] Testar correção de vulnerabilidade de UserID;
-- [X] Corrigir bug onde o server não verifica se o usuario rodou o dado quando recebe uma resposta;
-- [ ] Corrigir bug que permite duas pessoas com o mesmo nome de usuario;
-- [ ] Feature: Alterar o nome de usuario durante a partida;
+- [X] Corrigir bug onde o server não verifica se o usuário rodou o dado quando recebe uma resposta;
+- [X] Corrigir bug que permite duas pessoas com o mesmo nome de usuário;
+- [ ] Feature: Alterar o nome de usuário durante a partida;
+- [ ] Feature: Exibir mensagem para usuários conectados quando a sala é fechada;
 - [ ] Feature: Botão para reconectar na tela de conexão perdida
 - [ ] Feature: Mensagem de aviso ao clicar no dado sem ser sua vez;
 - [ ] Feature: Adicionar efeitos sonoros;
-- [ ] Possivel ideia: Full-Rewrite em Typescript e Next.JS;
-- [ ] Possivel ideia: Não usar Socket.IO;
-- [ ] Possivel ideia: Re-desenhar menu principal do jogo;
+- [ ] Possível ideia: Full-Rewrite em Typescript e Next.JS; (Precisa URGENTEMENTE ser feito)
+- [ ] Possível ideia: Não usar Socket.IO;
+- [ ] Possível ideia: Re-desenhar menu principal do jogo;
 
 Um jogo simples feito usando:
 

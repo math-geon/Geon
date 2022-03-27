@@ -83,7 +83,7 @@
                     <span><a target="_blank" href="https://www.instagram.com/Gabriel._moreira_.05/">Gabriel Moreira</a>: Programação do jogo, revisão de erros ortográficos.</span><br/>
                     <span><a target="_blank" href="https://www.instagram.com/_joaofrancisco.f/">João Francisco</a>: Revisão de erros ortográficos, criação de regras.</span><br/>
                     <span><a target="_blank" href="https://www.instagram.com/ricardopfilho/">Ricardo Filho</a>: Projeto Escrito, apresentador.</span><br/>
-                    <span><a target="_blank" href="https://github.com/LoboMetalurgico">Lobo </a> <a target="_blank" href="https://beta.allonsve.com/">Metalurgico</a>: Contribuidor, progamação</span><br/>
+                    <span><a target="_blank" href="https://github.com/LoboMetalurgico">Lobo </a> <a target="_blank" href="https://beta.allonsve.com/">Metalurgico</a>: Contribuidor, programação.</span><br/>
                 </div>
                 <div class="ConnectingScreen" style="display: none">
                     <h1 class="ConnectingText">Conectando ao servidor...</h1>
@@ -108,10 +108,10 @@
                     </div>
                     <div class="UserNameInput" style="display: none">
                         <p class="UserNameHeader">Nome de usuário:</p>
-                        <p class="FormText">Insira seu nome de usuário: <t class="LittleWarn">(Ele estará visível para todos na sala)</t></p>
+                        <p class="FormText">Insira seu nome de usuário: <t id="userNameErrors" class="LittleWarn">(Ele estará visível para todos na sala)</t></p>
                         <form class="userInput">
                             <input class="UserTextInput" required='required' type="text" placeholder="Um nome legal!" onInput="UsernameHandler()" onPropertychange="UsernameHandler()">
-                            <input class="UserTextSubmit" type="submit" value="Pronto!" disabled>
+                            <input id="submitButton" class="UserTextSubmit" type="submit" value="Pronto!" disabled>
                         </form>      
                     </div>
                     <div class="Rules" style="display: none">
