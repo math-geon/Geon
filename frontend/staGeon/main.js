@@ -8,6 +8,8 @@ var MouseSelectedBox = false;
 var loaded = false;
 
 var questionPopupToRespond = false;
+var typeNewNameWindowOpen = false;
+var userNameAlreadyExistsErrorShow = false;
 
 const Board1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const Board2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 11];
@@ -151,8 +153,10 @@ function Loaded() {
     document.getElementsByClassName('UserNameInput')[0].id = '';
     document.getElementsByClassName('UserNameInput')[0].style.display = 'none';
     document.getElementsByClassName('RoomFulled')[0].style.display = 'block';
+    document.getElementById('submitButton').disabled = true;
     CurrentRoom = '';
     UserName = '';
+    typeNewNameWindowOpen = false;
     const Playrs = [...document.getElementsByClassName('Players')[0].children];
     Playrs.forEach((element, index) => {
       element.remove();
@@ -170,8 +174,10 @@ function Loaded() {
     document.getElementsByClassName('UserNameInput')[0].id = '';
     document.getElementsByClassName('UserNameInput')[0].style.display = 'none';
     document.getElementsByClassName('RoomNotFounded')[0].style.display = 'block';
+    document.getElementById('submitButton').disabled = true;
     CurrentRoom = '';
     UserName = '';
+    typeNewNameWindowOpen = false;
     const Playrs = [...document.getElementsByClassName('Players')[0].children];
     Playrs.forEach((element, index) => {
       element.remove();
@@ -358,11 +364,21 @@ function Loaded() {
 
   socket.on('UserNameAlreadyExists', () => {
     console.log('Let\'s change my name!');
+    typeNewNameWindowOpen = true;
+    document.getElementById('submitButton').disabled = true;
+
+    if (!userNameAlreadyExistsErrorShow) {
+      document.getElementById('userNameErrors').innerHTML += '<br>Nome de usuário já existe!';
+    }
+
+    userNameAlreadyExistsErrorShow = true;
 
     setTimeout(() => {
-      document.getElementsByClassName('Rules')[0].style.display = 'none';
-      document.getElementsByClassName('UserNameInput')[0].style.display = 'block';
-      UserName = '';
+      if (typeNewNameWindowOpen) {
+        document.getElementsByClassName('Rules')[0].style.display = 'none';
+        document.getElementsByClassName('UserNameInput')[0].style.display = 'block';
+        UserName = '';
+      }
     }, 1000);
   });
 
@@ -442,11 +458,16 @@ function UserNameSubmit(event) {
   UserName = document.getElementsByClassName('UserTextInput')[0].value;
   socket.emit('RegisterUserName', JSON.stringify({ RoomId: CurrentRoom, UserId: UserId, UserName: UserName }));
   document.getElementsByClassName('UserNameInput')[0].id = 'popup-close';
+  document.getElementById('submitButton').disabled = true;
+  typeNewNameWindowOpen = false;
   setTimeout(() => {
-    document.getElementsByClassName('UserNameInput')[0].id = '';
-    document.getElementsByClassName('UserNameInput')[0].style.display = 'none';
-    document.getElementsByClassName('Rules')[0].style.display = 'block';
-    document.getElementsByClassName('Rules')[0].id = 'popup';
+    if (!typeNewNameWindowOpen) {
+      document.getElementsByClassName('UserNameInput')[0].id = '';
+      document.getElementsByClassName('UserNameInput')[0].style.display = 'none';
+      document.getElementsByClassName('Rules')[0].style.display = 'block';
+      document.getElementsByClassName('Rules')[0].id = 'popup';
+      document.getElementById('submitButton').disabled = false;
+    }
   }, 300);
 }
 
@@ -463,6 +484,7 @@ function StartTheGame(RoomID) {
       document.getElementsByClassName('UserNameInput')[0].id = 'popup';
       document.getElementsByClassName('UserNameInput')[0].style.display = 'block';
       document.getElementsByClassName('UserTextInput')[0].value = UserName;
+      document.getElementById('submitButton').disabled = true;
       setTimeout(() => { document.getElementsByClassName('UserNameInput')[0].id = ''; }, 300);
     }
   }
@@ -540,6 +562,7 @@ function Win() {
   document.getElementsByClassName('UserNameInput')[0].id = '';
   document.getElementsByClassName('UserNameInput')[0].style.display = 'none';
   document.getElementsByClassName('RoomFulled')[0].style.display = 'none';
+  document.getElementById('submitButton').disabled = false;
   CurrentRoom = '';
   UserName = '';
   const Playrs = [...document.getElementsByClassName('Players')[0].children];
@@ -568,6 +591,7 @@ function Lose() {
   document.getElementsByClassName('UserNameInput')[0].id = '';
   document.getElementsByClassName('UserNameInput')[0].style.display = 'none';
   document.getElementsByClassName('RoomFulled')[0].style.display = 'none';
+  document.getElementById('submitButton').disabled = false;
   CurrentRoom = '';
   UserName = '';
   const Playrs = [...document.getElementsByClassName('Players')[0].children];
