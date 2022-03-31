@@ -10,8 +10,10 @@ export class LoadingScreen extends React.Component<ILoadingScreen> {
     loading: true,
     itensToLoad: 0,
     itensLoaded: 0,
+    disableLoadingScreen: false,
   }
   canvasElement: React.MutableRefObject<null>;
+  backgroundCanvasElement: React.MutableRefObject<null>;
   animationSettings: loadingCanvasSettings = {
     canvas: null,
     context: null,
@@ -31,6 +33,7 @@ export class LoadingScreen extends React.Component<ILoadingScreen> {
     super(props);
 
     this.canvasElement = createRef();
+    this.backgroundCanvasElement = createRef();
   }
 
   componentDidMount(): void {
@@ -84,15 +87,21 @@ export class LoadingScreen extends React.Component<ILoadingScreen> {
     if (!settings.canvas) return;
     const canvas = settings.canvas;
     const ctx = settings.context;
+    const canvasBG = this.backgroundCanvasElement.current as unknown as HTMLCanvasElement;
+    if (!canvasBG) return;
+    const ctxBG = canvasBG.getContext('2d');
+    if (!ctxBG) return;
     
     var onResize = (): void => {
       if (!this.state.loading) {
         window.removeEventListener('resize', onResize);
         return;
       }
-      var size = Math.max(window.innerWidth, window.innerHeight);
-      canvas.width = size;
-      canvas.height = size;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      canvasBG.width = window.innerWidth;
+      canvasBG.height = window.innerHeight;
+      this.canvasDrawBackground();
 
       const MaxSize = Math.max(window.innerWidth, window.innerHeight);
       var fontSize = MaxSize;
@@ -101,7 +110,7 @@ export class LoadingScreen extends React.Component<ILoadingScreen> {
         ctx.font = `${fontSize}px sans-serif`;
       } while (ctx.measureText(settings.loadingText).width > MaxSize / 6);
       this.animationSettings.loadingTextSize = fontSize;
-    }
+    };
 
     onResize();
     window.addEventListener('resize', onResize);
@@ -141,15 +150,54 @@ export class LoadingScreen extends React.Component<ILoadingScreen> {
       }
     }, 500);
 
+    this.canvasDrawBackground();
+
     this.animationSettings.frame = 0;
     requestAnimationFrame(() => {this.canvasAnimation();});
   }
 
+  canvasDrawBackground(): void {
+    const canvas = this.backgroundCanvasElement.current as unknown as HTMLCanvasElement;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Clear canvas and draw background
+    ctx.fillStyle = this.animationSettings.mainColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.globalCompositeOperation = 'lighten';
+
+    // Gradient 1
+    const gradient1 = ctx.createRadialGradient(canvas.width, 0, 0, canvas.width, 0, canvas.width / 1.45);
+    gradient1.addColorStop(0, this.animationSettings.secondaryColor);
+    gradient1.addColorStop(1, 'transparent');
+    ctx.fillStyle = gradient1;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Gradient 2
+    const gradient2 = ctx.createRadialGradient(0, canvas.height, 0, 0, canvas.height, canvas.width / 1.45);
+    gradient2.addColorStop(0, this.animationSettings.thirdColor);
+    gradient2.addColorStop(1, 'transparent');
+    ctx.fillStyle = gradient2;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Gradient 3
+    const gradient3 = ctx.createRadialGradient(canvas.width, canvas.height, 0, canvas.width, canvas.height, canvas.width / 1.35);
+    gradient3.addColorStop(0, this.animationSettings.fortyColor);
+    gradient3.addColorStop(1, 'transparent');
+    ctx.fillStyle = gradient3;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.globalCompositeOperation = 'source-over';
+
+  }
+
   canvasAnimation(): void {
     if (Math.floor(Math.sin(this.animationSettings.frame % 360) + 2) === 1) {
-      this.animationSettings.frame += (Math.sin(this.animationSettings.frame % 360) + 2) * 60/1000;
+      this.animationSettings.frame += (Math.sin(this.animationSettings.frame % 360) + 2) * 60 / 1000;
     } else {
-      this.animationSettings.frame += (Math.sin(this.animationSettings.frame % 360) + 2) * 30/1000;
+      this.animationSettings.frame += (Math.sin(this.animationSettings.frame % 360) + 2) * 30 / 1000;
     }
     const settings = this.animationSettings;
     if (!settings.context) return;
@@ -157,35 +205,8 @@ export class LoadingScreen extends React.Component<ILoadingScreen> {
     const canvas = settings.canvas;
     const ctx = settings.context;
 
-
-    // Clear canvas and draw background
-    ctx.fillStyle = settings.mainColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.globalCompositeOperation = "lighten";
-
-    // Gradient 1
-    const gradient1 = ctx.createRadialGradient(canvas.width, 0, 0, canvas.width, 0, canvas.width / 1.45);
-    gradient1.addColorStop(0, settings.secondaryColor);
-    gradient1.addColorStop(1, 'transparent');
-    ctx.fillStyle = gradient1;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Gradient 2
-    const gradient2 = ctx.createRadialGradient(0, canvas.height, 0, 0, canvas.height, canvas.width / 1.45);
-    gradient2.addColorStop(0, settings.thirdColor);
-    gradient2.addColorStop(1, 'transparent');
-    ctx.fillStyle = gradient2;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Gradient 3
-    const gradient3 = ctx.createRadialGradient(canvas.width, canvas.height, 0, canvas.width, canvas.height, canvas.width / 1.35);
-    gradient3.addColorStop(0, settings.fortyColor);
-    gradient3.addColorStop(1, 'transparent');
-    ctx.fillStyle = gradient3;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.globalCompositeOperation = "source-over";
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw loading text
     ctx.fillStyle = settings.foregroundColor;
@@ -199,23 +220,32 @@ export class LoadingScreen extends React.Component<ILoadingScreen> {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = settings.secondaryColor;
-    ctx.fillText(`${Math.floor(this.state.itensLoaded / this.state.itensToLoad * 100)}% (${this.state.itensLoaded}/${this.state.itensToLoad})`, canvas.width / 2, canvas.height / 2 + settings.loadingTextSize);
-
-    ctx.globalCompositeOperation = "lighten";
+    ctx.fillText(
+      `${Math.floor(this.state.itensLoaded / this.state.itensToLoad * 100)}% (${this.state.itensLoaded}/${this.state.itensToLoad})`,
+      canvas.width / 2,
+      canvas.height / 2 + settings.loadingTextSize,
+    );
 
     // Draw circular progress bar around the loading text with a round cap
     ctx.beginPath();
     ctx.lineCap = 'round';
     ctx.strokeStyle = settings.secondaryColor;
-    ctx.arc(canvas.width / 2, canvas.height / 2, ctx.measureText(settings.loadingText).width * 2.5, ((settings.frame % 360) * 2), Math.floor(this.state.itensLoaded / this.state.itensToLoad * 2)  * Math.PI + ((settings.frame % 360) * 2));
+    ctx.arc(
+      canvas.width / 2,
+      canvas.height / 2,
+      ctx.measureText(settings.loadingText).width * 2.5,
+      ((settings.frame % 360) * 2),
+      Math.floor(this.state.itensLoaded / this.state.itensToLoad * 2) * Math.PI + ((settings.frame % 360) * 2),
+    );
     ctx.lineWidth = canvas.width / 50;
     ctx.stroke();
-
-    ctx.globalCompositeOperation = "source-over";
 
     if (this.state.loading) {
       requestAnimationFrame(() => {this.canvasAnimation();});
     } else if (!this.animationSettings.finishedPlayOut) {
+      if (this.backgroundCanvasElement.current) {
+        ctx.drawImage(this.backgroundCanvasElement.current, 0, 0, canvas.width, canvas.height);
+      }
       ctx.save();
       this.animationSettings.frame = 0;
       requestAnimationFrame(() => {this.canvasAnimationOut();});
@@ -240,18 +270,26 @@ export class LoadingScreen extends React.Component<ILoadingScreen> {
     ctx.clearRect(canvas.width / 2 - settings.frame, canvas.height / 2 - settings.frame, settings.frame * 2, settings.frame * 2);
 
     if (settings.frame > canvas.width) {
-      this.animationSettings.finishedPlayOut = true;
+      this.setState({
+        disableLoadingScreen: true,
+      });
     } else {
       this.animationSettings.frame += canvas.width * 0.03;
     }
 
     
-    if (!this.animationSettings.finishedPlayOut) {
+    if (!this.state.disableLoadingScreen) {
       requestAnimationFrame(() => {this.canvasAnimationOut();});
     }
   }
 
   render(): JSX.Element {
-    return <canvas id={styles.loadingScreen} ref={this.canvasElement} className={this.state.loading ? styles.loading : styles.loaded} style={{display: this.animationSettings.finishedPlayOut ? 'none' : 'block'}}/>;
+    return <div id={styles.loadingScreen}>
+      <canvas id={styles.backgroundLoadingScreen} ref={this.backgroundCanvasElement}
+        style={{ display: !this.state.loading ? 'none' : 'block' }}/>
+      <canvas id={styles.loadingScreenCanvas} ref={this.canvasElement} 
+        className={this.state.loading ? styles.loading : styles.loaded}
+        style={{ display: this.state.disableLoadingScreen ? 'none' : 'block' }}/>
+    </div>;
   }
 }

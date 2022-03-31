@@ -10,6 +10,7 @@ export interface LoadingScreenState {
     loading: boolean,
     itensToLoad: number,
     itensLoaded: number,
+    disableLoadingScreen: boolean,
 }
 
 export interface loadingCanvasSettings {
