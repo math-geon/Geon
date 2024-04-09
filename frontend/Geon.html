@@ -32,8 +32,7 @@
         <div class="ErrorBox">
           <h1 class="ErrorTextTitle">Sala Inexistente!</h1>
           <h1 class="ErrorTextDescription">Não foi possivel localizar esta sala.</h1>
-          <button class="CloseWarn"
-            onclick="document.getElementsByClassName('RoomNotFounded')[0].style.display = 'none'">Ok</button>
+          <button id="roomNotFoundedButton" class="CloseWarn">Ok</button>
           <div class="ErrorEffect"></div>
         </div>
       </div>
@@ -41,8 +40,7 @@
         <div class="ErrorBox">
           <h1 class="ErrorTextTitle">Sala Cheia!</h1>
           <h1 class="ErrorTextDescription">Não foi possivel entrar na sala, pois ela se encontra cheia.</h1>
-          <button class="CloseWarn"
-            onclick="document.getElementsByClassName('RoomFulled')[0].style.display = 'none'">Ok</button>
+          <button id="fullRoomButton" class="CloseWarn">Ok</button>
           <div class="ErrorEffect"></div>
         </div>
       </div>
@@ -50,7 +48,7 @@
         <div class="WinBox">
           <h1 class="WinTextTitle">Parabéns, você ganhou!</h1>
           <h1 class="WinTextDescription">Você se provou um mestre do teorema de pitagoras. Parabéns!</h1>
-          <button class="CloseWin" onclick="Win()">Ok</button>
+          <button class="CloseWin" id="youWinButton">Ok</button>
           <div class="WinEffect"></div>
         </div>
       </div>
@@ -58,7 +56,7 @@
         <div class="LoseBox">
           <h1 class="LoseTextTitle">Que pena, você perdeu!</h1>
           <h1 class="LoseTextDescription">Não foi dessa vez, tente novamente. ;-;</h1>
-          <button class="CloseLose" onclick="Lose()">Ok</button>
+          <button class="CloseLose" id="youLoseButton">Ok</button>
           <div class="LoseEffect"></div>
         </div>
       </div>
@@ -72,13 +70,13 @@
               onPropertychange="RoomIdHandler()">
           </form>
           <div class="Buttons">
-            <button class="CreditsButton" onclick="Credits()">Créditos</button>
-            <button class="PlayButton" onclick="StartGame()" disabled>Jogar</button>
-            <button class="CreateRoom" onclick="CreateGame()">Criar Sala</button>
+            <button class="CreditsButton" id="creditsButton">Créditos</button>
+            <button class="PlayButton" id="playButton" disabled>Jogar</button>
+            <button class="CreateRoom" id="createGameButton">Criar Sala</button>
           </div>
         </div>
         <div class="CreditsScreen" style="display: none">
-          <button class="BackToMainMenuFromCredits" onclick="BackToMainMenu('Credits')">Voltar</button>
+          <button class="BackToMainMenuFromCredits" id="backToMainMenuButton">Voltar</button>
           <h1 class="CreditsHeader">Créditos:</h1>
           <span><a rel="noopener" target="_blank" href="https://github.com/emanuelfranklyn">Emanuel <a rel="noopener" target="_blank"
                 href="https://www.talesgardem.com.br/">Franklyn</a></a>: <a rel="noopener" target="_blank" class="EasterEgg"
@@ -109,17 +107,17 @@
             <div class="RoomInformation">
               <p class="RoomIdTextHeader">ID da sala: </p>
               <div class="RoomIdTextPlaceHolder"
-                onclick="copyToClipboard(CurrentRoom); document.getElementsByClassName('CopyText')[0].textContent = 'Copiado!'"
+                onClick="copyToClipboard(CurrentRoom); document.getElementsByClassName('CopyText')[0].textContent = 'Copiado!'"
                 onmouseover="MouseSelectedText = true;BoxWrapper('CopyTextSpeechBox')"
                 onmouseleave="MouseSelectedText = false;BoxWrapper('CopyTextSpeechBox')">
                 <p id="RoomIdText" class="RoomIdText">1234567</p>
               </div>
               <img class="BlockRoomId" title="Esconder código" src="/staGeon/resources/blockicon.png"
-                onclick="if (document.getElementById('RoomIdText').textContent !== 'Oculto!') {document.getElementById('RoomIdText').textContent = 'Oculto!'; document.getElementsByClassName('BlockRoomId')[0].src=`/staGeon/resources/allowicon.png`; document.getElementsByClassName('BlockRoomId')[0].title='Mostrar código'} else {document.getElementById('RoomIdText').textContent = CurrentRoom; document.getElementsByClassName('BlockRoomId')[0].src=`/staGeon/resources/blockicon.png`; document.getElementsByClassName('BlockRoomId')[0].title='Esconder código'}">
+                onClick="if (document.getElementById('RoomIdText').textContent !== 'Oculto!') {document.getElementById('RoomIdText').textContent = 'Oculto!'; document.getElementsByClassName('BlockRoomId')[0].src=`/staGeon/resources/allowicon.png`; document.getElementsByClassName('BlockRoomId')[0].title='Mostrar código'} else {document.getElementById('RoomIdText').textContent = CurrentRoom; document.getElementsByClassName('BlockRoomId')[0].src=`/staGeon/resources/blockicon.png`; document.getElementsByClassName('BlockRoomId')[0].title='Esconder código'}">
               <button onClick="Lose()">Sair</button>
             </div>
             <div class="CopyTextSpeechBox" style="display: none"
-              onclick="copyToClipboard(CurrentRoom); document.getElementsByClassName('CopyText')[0].textContent = 'Copiado!'"
+              onClick="copyToClipboard(CurrentRoom); document.getElementsByClassName('CopyText')[0].textContent = 'Copiado!'"
               onmouseover="MouseSelectedBox = true;BoxWrapper('CopyTextSpeechBox')"
               onmouseleave="MouseSelectedBox = false;BoxWrapper('CopyTextSpeechBox')">
               <b class="CopyText">Copiar código</b>
@@ -145,7 +143,7 @@
                 ele volta para a casa onde estava.</li>
               <li>O vencedor será o primeiro a passar a casa CHEGADA.</li>
             </ol>
-            <button class="CloseRules" onclick="CloseRules()">Entendi</button>
+            <button class="CloseRules" id="closeRulesButton">Entendi</button>
           </div>
           <div class="QuestionInput" style="display: none">
             <p class="QuestionHeader">Pergunta</p>
@@ -163,7 +161,7 @@
             <p class="PlayerInTheRoomHeader">Jogadores na sala: (0/4)</p>
             <div class="Players"></div>
           </div>
-          <div class="Dice" onclick="RunDice()" style="background-image: url('/staGeon/resources/DiceIcon.png');">
+          <div class="Dice" id="runDiceButton" style="background-image: url('/staGeon/resources/DiceIcon.png');">
             <div class="DiceNumber" style="display: none">7</div>
           </div>
         </div>

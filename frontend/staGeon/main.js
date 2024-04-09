@@ -616,3 +616,43 @@ function CloseRules() {
     document.getElementsByClassName('Rules')[0].style.display = 'none';
   }, 300);
 }
+
+document.getElementById('roomNotFoundedButton').addEventListener('click', () => {
+  document.getElementsByClassName('RoomNotFounded')[0].style.display = 'none';
+});
+
+document.getElementById('fullRoomButton').addEventListener('click', () => {
+  document.getElementsByClassName('RoomFulled')[0].style.display = 'none';
+});
+
+document.getElementById('youWinButton').addEventListener('click', () => {
+  Win();
+});
+
+document.getElementById('youLoseButton').addEventListener('click', () => {
+  Lose();
+});
+
+document.getElementById('creditsButton').addEventListener('click', () => {
+  Credits();
+});
+
+document.getElementById('playButton').addEventListener('click', () => {
+  StartGame();
+});
+
+document.getElementById('createGameButton').addEventListener('click', () => {
+  CreateGame();
+});
+
+document.getElementById('backToMainMenuButton').addEventListener('click', () => {
+  BackToMainMenu('Credits');
+});
+
+document.getElementById('runDiceButton').addEventListener('click', () => {
+  RunDice();
+});
+
+document.getElementById('closeRulesButton').addEventListener('click', () => {
+  CloseRules();
+});
