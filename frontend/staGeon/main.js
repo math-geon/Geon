@@ -3,13 +3,12 @@
 // eslint-disable-next-line no-undef
 const socket = io();
 
+var userNameAlreadyExistsErrorShow = false;
+var questionPopupToRespond = false;
+var typeNewNameWindowOpen = false;
 var MouseSelectedText = false;
 var MouseSelectedBox = false;
 var loaded = false;
-
-var questionPopupToRespond = false;
-var typeNewNameWindowOpen = false;
-var userNameAlreadyExistsErrorShow = false;
 
 const Board1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const Board2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 11];
@@ -438,7 +437,7 @@ function CreateGame() {
   document.getElementsByClassName('MenuBackground')[0].style.display = 'none';
   document.getElementsByClassName('ConnectingScreen')[0].style.display = 'block';
   document.getElementsByClassName('ProgressProgressBar')[0].style.width = '0vw';
-  socket.emit('GenerateRoom', JSON.stringify({ UserId: UserId }));
+  socket.emit('GenerateRoom', JSON.stringify({ UserId }));
   ProgressbarHandler('ProgressProgressBar', '49.5', '75');
 }
 
@@ -456,7 +455,7 @@ function UsernameHandler() {
 function UserNameSubmit(event) {
   event.preventDefault();
   UserName = document.getElementsByClassName('UserTextInput')[0].value;
-  socket.emit('RegisterUserName', JSON.stringify({ RoomId: CurrentRoom, UserId: UserId, UserName: UserName }));
+  socket.emit('RegisterUserName', JSON.stringify({ RoomId: CurrentRoom, UserId, UserName }));
   document.getElementsByClassName('UserNameInput')[0].id = 'popup-close';
   document.getElementById('submitButton').disabled = true;
   typeNewNameWindowOpen = false;
@@ -501,7 +500,7 @@ function PlayRoomIdBlockAndExecute(event) {
 }
 
 function RunDice() {
-  socket.emit('RunDice', JSON.stringify({ RoomId: CurrentRoom, UserId: UserId }));
+  socket.emit('RunDice', JSON.stringify({ RoomId: CurrentRoom, UserId }));
 }
 
 function AddUserPawn() {
@@ -548,7 +547,7 @@ function ResponseQ(event) {
       if (questionPopupToRespond) { return; }
       document.getElementsByClassName('QuestionInput')[0].style.display = 'none';
     }, 300);
-    socket.emit('QuestionResponse', JSON.stringify({ RoomId: CurrentRoom, UserId: UserId, Answer: document.getElementsByClassName('QuestionTextInput')[0].value }));
+    socket.emit('QuestionResponse', JSON.stringify({ RoomId: CurrentRoom, UserId, Answer: document.getElementsByClassName('QuestionTextInput')[0].value }));
   }
 }
 

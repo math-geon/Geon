@@ -437,7 +437,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 21vw;
+    width: 26vw;
     height: 10vh;
     background-color: #FFFC;
     border-bottom-right-radius: 25px;
@@ -521,7 +521,7 @@ body {
     width: 2.5vw;
     height: 2.5vw;
     margin-top: 0.3vh;
-    left: 17vw;
+    right: 0;
     padding: 1vw;
     cursor: pointer;
 }

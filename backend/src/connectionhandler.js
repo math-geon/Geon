@@ -242,7 +242,7 @@ function RunDice(socket, Data) {
     // const DiceResult = (18 * 2) + 1; // Debug
     ActiveRooms[RoomIndex].Players[UserIndex].NextPosition = ActiveRooms[RoomIndex].Players[UserIndex].Position + DiceResult;
     ActiveRooms[RoomIndex].Players.forEach((element) => {
-      element.socket.emit('DiceRolled', JSON.stringify({ RoomId: Data.RoomId, UserId: Data.UserId, DiceResult: DiceResult, UserPosition: ActiveRooms[RoomIndex].Players[UserIndex].NextPosition }));
+      element.socket.emit('DiceRolled', JSON.stringify({ RoomId: Data.RoomId, UserId: Data.UserId, DiceResult, UserPosition: ActiveRooms[RoomIndex].Players[UserIndex].NextPosition }));
     });
     GenerateQuestion(socket, Data);
   }

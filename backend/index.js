@@ -18,6 +18,6 @@ app.get('/', (req, res) => {
 connection(io);
 
 // Liga o servidor.
-http.listen('3000', () => {
-  console.log('Conectado com a porta: 3000');
+http.listen('3010', () => {
+  console.log('Conectado com a porta: 3010');
 });
